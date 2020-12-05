@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Prob
 {
@@ -42,9 +43,22 @@ namespace Prob
         static void Main(string[] args)
         {
             ConsoleKeyInfo cki;
-
+            WriteAt("B", 10, 3);
+            Thread.Sleep(200);
+            WriteAt("O", 13, 3);
+            Thread.Sleep(200);
+            WriteAt("O", 16, 3);
+            Thread.Sleep(200);
+            WriteAt("G", 19, 3);
+            Thread.Sleep(200);
+            WriteAt("L", 22, 3);
+            Thread.Sleep(200);
+            WriteAt("E", 25, 3);
+            Thread.Sleep(200);
+            
             do
             {
+
                 Console.Clear();
                 Console.Write("Menu : BIENVENUE DANS NOTRE JEU BOOGLE\n"
                                  + "1 \n"
