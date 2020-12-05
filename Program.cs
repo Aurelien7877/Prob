@@ -10,7 +10,8 @@ namespace Prob
     {
         static void Main(string[] args)
         {
-
+            Console.WriteLine("TEST");
+            Console.WriteLine("HOUOUU");
         }
     }
 }
