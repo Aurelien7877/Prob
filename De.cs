@@ -9,13 +9,13 @@ namespace Prob
     class De
     {
         private char[] ensembleLettre;  //pour l'ensemble de lettre
-        private char lettreTriee;       //la lettre triée
+        private char lettreTiree;       //la lettre triée
 
         //constructeur
         public De (char [] ensembleLettre, char lettreTriee)
         {
             this.ensembleLettre = ensembleLettre;
-            this.lettreTriee = lettreTriee;
+            this.lettreTiree = lettreTriee;
         }
 
         //propriétées
@@ -25,17 +25,29 @@ namespace Prob
             set { this.ensembleLettre = value; }
         }
 
-        public char LettreTriee
+        public char LettreTiree
         {
-            get { return this.lettreTriee; }
-            set { this.lettreTriee = value; }
+            get { return this.lettreTiree; }
+            set { this.lettreTiree = value; }
         }
 
         //Méthode imposée : cette méthode permet de tirer au hasard une lettre parmi les 6
         public void Lance(Random r)
         {
             int tri = r.Next(0, 7);
-            this.lettreTriee = ensembleLettre[tri];
+            this.lettreTiree = ensembleLettre[tri];
+        }
+
+        //Chaine qui décrit le dé
+        public string toString()
+        {
+            string n= null;
+            for (int i = 0; i<ensembleLettre.Length; i++)
+            {
+                n += ensembleLettre[i] + ", ";
+            }
+            string res = "Lettres sur ce dé : " + n + " | Lettre tirée : " + lettreTiree;
+            return res;
         }
     }
 }
