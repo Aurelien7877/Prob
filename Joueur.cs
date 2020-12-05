@@ -72,5 +72,7 @@ namespace Prob
             string res = "Joueur : " + this.nom + " | Score : " + this.score + "\nMots trouvés par ce joueur : " + liste;
             return res;
         }
+
+
     }
 }
