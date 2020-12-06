@@ -8,6 +8,7 @@ namespace Prob
 {
     class De
     {
+        //test
         private char[] ensembleLettre;  //pour l'ensemble de lettre
         private char lettreTiree;       //la lettre triée
 
