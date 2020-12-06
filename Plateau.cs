@@ -51,30 +51,12 @@ namespace Prob
 
 
 
-        //signature modifiée par rapport à l'enoncé  /!\ (pour utiliser la recursivité)
-        //compteur permet de recuperer la lettre recherchée dans le mot entré en parametre
-        // la lliste de positions sert a referencer les cases deja "utilisée"
-        public bool Test_Plateau(string mot, bool eligible = true, int compteur = 0)
-        {
-            char lettreRecherchee = mot[compteur];
+        
+        //public bool Test_Plateau(string mot, )
+        //{
 
-            for (int i = 0; i < this.lettresTirees.GetLength(0); i++)
-            {
-                for (int j = 0; j < this.lettresTirees.GetLength(1); j++)
-                {
-                    if (this.lettresTirees[i, j] == lettreRecherchee)
-                    {
-                        return Test_Plateau(mot, true, compteur + 1);
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-  
-            }
-            return true;
-        }
+        //}
+            
       
     }
 }
