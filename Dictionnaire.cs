@@ -8,6 +8,11 @@ namespace Prob
 {
     class Dictionnaire
     {
+        private string[] ensembleMot; //longueur déterminée ? 
+        private string langue;
+
+        //constructeur
+         
 
 
     }
