@@ -46,6 +46,7 @@
     <Compile Include="Dictionnaire.cs" />
     <Compile Include="De.cs" />
     <Compile Include="Joueur.cs" />
+    <Compile Include="Plateau.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

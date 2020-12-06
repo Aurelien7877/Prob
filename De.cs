@@ -9,8 +9,6 @@ namespace Prob
 
     class De
     {
-        //TESTHUEHFUEHFESIHFEHFHEISHFUSEHFH
-        //test
         private char[] ensembleLettre;  //pour l'ensemble de lettre
         private char lettreTiree;       //la lettre triée
 
