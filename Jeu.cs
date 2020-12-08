@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.IO;
 
 namespace Prob
 {
-    class Program
+    class Jeu
     {
         //menu Main
         static int SaisieNombre()
@@ -39,6 +40,12 @@ namespace Prob
             }
         }
 
+        static void CreationInstances ()
+        {
+            string[][] mot= new string [15][];
+            string langue = "Francais";
+            Dictionnaire[] mondico = new Dictionnaire(mot,langue);
+        }
 
         static void Main(string[] args)
         {
@@ -61,8 +68,8 @@ namespace Prob
 
                 Console.Clear();
                 Console.Write("Menu : BIENVENUE DANS NOTRE JEU BOOGLE\n"
-                                 + "1 \n"
-                                 + "2 \n"
+                                 + "1- Commencer à jouer ! \n"
+                                 + "2- Rappel des règles de jeu \n"
                                  + "3 \n"
                                  + "\n"
                                  + "Sélectionnez l'exercice désiré (taper le numéro de l'exo) --> ");
