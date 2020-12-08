@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Prob
 {
@@ -33,10 +34,11 @@ namespace Prob
         }
 
         //Méthode imposée : cette méthode permet de tirer au hasard une lettre parmi les 6
-        public void Lance(Random r)
+        public char Lance(Random r)
         {
-            int tri = r.Next(0, 7);
+            int tri = r.Next(0, 6);
             this.lettreTiree = ensembleLettre[tri];
+            return lettreTiree;
         }
 
         //Chaine qui décrit le dé

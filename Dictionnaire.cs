@@ -120,9 +120,10 @@ namespace Prob
         //recherche en récursif;
         public bool RechDichoRecursif(int debut, int fin, string mot)
         {
+            
             if (fin < debut) return false; //Erreur de placement des bornes
             int milieu = (debut + fin) / 2;
-            int resultat = string.Compare(mot, ensembleMot[milieu], true);
+            int resultat = 0;// string.Compare(mot, ensembleMot[milieu], true);
             if (resultat == 0) return true;
             if (resultat < 0) fin = milieu - 1;
             if (resultat > 0) debut = milieu + 1;
