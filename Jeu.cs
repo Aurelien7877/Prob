@@ -61,28 +61,28 @@ namespace Prob
             Plateau plateau = new Plateau(de, lettre);
             StreamReader sReader = plateau.OpenFile("Des.txt"); //inutile ici a modif, change a chaque tour
             plateau.ReadFile(sReader);                          //idem
+            //string affichage = plateau.ToString();
+            //Console.WriteLine(affichage);
+
+
             //PSeudo des n joueurs
-            for (int i =0; i<nbjoueur; i++)
+            for (int i =1; i<=nbjoueur; i++)
             {
-                WriteAt("Pseudo joueur " +i+1+" : ", 8, 3);
+                WriteAt("Pseudo joueur " +i+" : ", 8, 3);
                 string nom = Console.ReadLine();        //on créé n instances de joueurs
 
                 Console.Clear();
-                joueurs[i] = new Joueur(nom, score, motTrouves);
+                joueurs[i-1] = new Joueur(nom, score, motTrouves);
                
-            }
-            
-
-
-            //Dictionnaire[] mondico = new Dictionnaire(mot,langue);
-
-            
-            
-            //string affichage = plateau.ToString();
-            //Console.WriteLine(affichage);
+            }           
+            //Dictionnaire[] mondico = new Dictionnaire(mot,langue);                              
         }
 
-        
+        static void tourDeJeu ()
+        {
+
+            
+        }
 
         static void Main(string[] args)
         {
@@ -129,7 +129,9 @@ namespace Prob
                                 WriteAt("                           ",10, 4); //remplace les espaces
                             }
                         } while ((nbjoueur>4)||(nbjoueur<2));
+
                         CreationInstances(nbjoueur);
+
                         break;
 
                     case 2:
