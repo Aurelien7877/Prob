@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.IO;
+using System.Diagnostics;
 
 namespace Prob
 {
@@ -78,21 +79,39 @@ namespace Prob
 
         static void tourDeJeu (Joueur [] joueur)
         {
+            Stopwatch chrono = new Stopwatch(); //création du chronomètre
+
+            string mots;
             Console.Clear();
-            for (int i =0; i<joueur.Length; i++)
+            for (int i = 0; i < joueur.Length; i++)
             {
                 //Création plateau qui change a chaque tour 
                 //Dé 
-                char[,] lettre = new char[4, 4];
-                De[] de = new De[16];
-                Plateau plateau = new Plateau(de, lettre);
-                StreamReader sReader = plateau.OpenFile("Des.txt"); //inutile ici a modif, change a chaque tour
-                plateau.ReadFile(sReader);                          //idem
-                WriteAt("Au tour de " + joueur[i].Nom +"\n",15 , 1);
+                //ConsoleKeyInfo cki=Console.ReadKey();
 
-                string affichage = plateau.ToString();
-                Console.WriteLine(affichage);
                 
+                    chrono.Start(); //démarre le chrono
+                    char[,] lettre = new char[4, 4];
+                    De[] de = new De[16];
+                    Plateau plateau = new Plateau(de, lettre);
+                    StreamReader sReader = plateau.OpenFile("Des.txt"); //inutile ici a modif, change a chaque tour
+                    plateau.ReadFile(sReader);                          //idem
+                    WriteAt("Au tour de " + joueur[i].Nom + "\n", 20, 3);
+
+                    string affichage = plateau.ToString();
+                    WriteAt(affichage, 0, 3);
+                    //Console.WriteLine(affichage);
+                    WriteAt("Chronomètre lancé", 20, 5);
+                //cki = Console.ReadKey();
+                while (chrono.ElapsedMilliseconds < 60000) //tant que le chrono est inferieur a 1 min
+                {
+                    WriteAt("Saisissez le mot :\n",0, 8);
+                    mots = Console.ReadLine();
+                }
+                WriteAt("Fin du temps imparti, au suivant !", 20, 6);
+                Thread.Sleep(1000);
+                chrono.Reset(); //on reset le chrono pour chaque tour
+                //if (i == 1) { i--; }
 
 
             }
@@ -151,7 +170,22 @@ namespace Prob
                             }
                         } while ((nbjoueur>4)||(nbjoueur<2));
 
-                        
+                        //Saisie du temps de jeu 
+                        bool tempsValide = false;
+                        while (tempsValide == false)
+                        {
+                            WriteAt("Veuiller entrer le nombre total de tour de jeu: (minimum 2 tours, le nombre doit être pair)", 30, 12);
+                            int nbToursDeJeu = Convert.ToInt32(Console.ReadLine());
+                            if (nbToursDeJeu < 2 || nbToursDeJeu % 2 != 0)
+                            {
+                                WriteAt("Entrée invalide", 30, 13);
+                            }
+                            else
+                            {
+                                tempsValide = true;
+                            }
+                        }
+
                         Joueur [] joueurs = CreationInstances(nbjoueur);
                         tourDeJeu(joueurs);
 
