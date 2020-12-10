@@ -17,6 +17,13 @@ namespace Prob
             do
             {
                 choix = int.Parse(Console.ReadLine());
+                if ((choix < 1) || (choix > 4)) 
+                { 
+                    WriteAt("Saisie invalide, réessayez", 42, 17);
+                    Thread.Sleep(1000);
+                    WriteAt("                                 ", 42, 17);
+                    WriteAt(" ", 80, 16);
+                }
             } while ((choix < 1) || (choix > 4));               //Blindage
             return choix;
         }
@@ -40,13 +47,10 @@ namespace Prob
             }
         }
 
-        static void CreationInstances (int nbjoueur)
+        //méthode qui va crée les instances de joueurs
+        static Joueur[] CreationInstances (int nbjoueur)
         {
             Console.Clear();
-            //initialisation des variables dont on a besoin
-            //dico
-            string[][] mot= new string [15][];
-            string langue = "Francais";
 
             //Dé 
             char[,]lettre = new char [4,4];
@@ -57,59 +61,74 @@ namespace Prob
             List<string> motTrouves = new List<string>(100);
             Joueur[] joueurs = new Joueur[nbjoueur];
 
-            //Création plateau
-            Plateau plateau = new Plateau(de, lettre);
-            StreamReader sReader = plateau.OpenFile("Des.txt"); //inutile ici a modif, change a chaque tour
-            plateau.ReadFile(sReader);                          //idem
-            //string affichage = plateau.ToString();
-            //Console.WriteLine(affichage);
-
-
             //PSeudo des n joueurs
             for (int i =1; i<=nbjoueur; i++)
             {
-                WriteAt("Pseudo joueur " +i+" : ", 8, 3);
+                WriteAt("Pseudo joueur " +i+" : ", 30, 12);
                 string nom = Console.ReadLine();        //on créé n instances de joueurs
 
                 Console.Clear();
                 joueurs[i-1] = new Joueur(nom, score, motTrouves);
                
-            }           
-            //Dictionnaire[] mondico = new Dictionnaire(mot,langue);                              
+            }
+            return joueurs;
+            //Dictionnaire[] mondico = new Dictionnaire(mot,langue);  
+            
         }
 
-        static void tourDeJeu ()
+        static void tourDeJeu (Joueur [] joueur)
         {
+            Console.Clear();
+            for (int i =0; i<joueur.Length; i++)
+            {
+                //Création plateau qui change a chaque tour 
+                //Dé 
+                char[,] lettre = new char[4, 4];
+                De[] de = new De[16];
+                Plateau plateau = new Plateau(de, lettre);
+                StreamReader sReader = plateau.OpenFile("Des.txt"); //inutile ici a modif, change a chaque tour
+                plateau.ReadFile(sReader);                          //idem
+                WriteAt("Au tour de " + joueur[i].Nom +"\n",15 , 1);
 
-            
+                string affichage = plateau.ToString();
+                Console.WriteLine(affichage);
+                
+
+
+            }
+
         }
 
         static void Main(string[] args)
         {
+            //Console.WriteLine(Console.LargestWindowHeight); //41 Mesires max de la fenetre (de mon ordi donc on met des valeures inf)
+            //Console.WriteLine(Console.LargestWindowWidth); //171
+            Console.WindowHeight = 28; //y
+            Console.WindowWidth = 120;//x
             ConsoleKeyInfo cki;
-            WriteAt("B", 10, 3);
+            WriteAt("B", 54, 12);
             Thread.Sleep(200);
-            WriteAt("O", 13, 3);
+            WriteAt("O", 57, 12);
             Thread.Sleep(200);
-            WriteAt("O", 16, 3);
+            WriteAt("O", 60, 12);
             Thread.Sleep(200);
-            WriteAt("G", 19, 3);
+            WriteAt("G", 63, 12);
             Thread.Sleep(200);
-            WriteAt("L", 22, 3);
+            WriteAt("L", 66, 12);
             Thread.Sleep(200);
-            WriteAt("E", 25, 3);
+            WriteAt("E", 69, 12);
             Thread.Sleep(200);
             
             do
             {
 
                 Console.Clear();
-                Console.Write("Menu : BIENVENUE DANS NOTRE JEU BOOGLE\n"
-                                 + "1- Commencer à jouer ! \n"
-                                 + "2- Rappel des règles de jeu \n"
-                                 + "3 \n"
-                                 + "\n"
-                                 + "Sélectionnez l'exercice désiré (taper le numéro de l'exo) --> ");
+                WriteAt("BIENVENUE DANS NOTRE JEU BOOGLE", 45, 10);
+                WriteAt("1- Commencer à jouer ", 49, 12);
+                WriteAt("2- Lire les règles ", 49, 13);
+                WriteAt("3- Quitter ", 49, 14);
+                WriteAt("Sélectionnez le numéro correpondant -> ", 42, 16);
+                
                 int exo = SaisieNombre();
                 Console.WriteLine();
                 switch (exo) 
@@ -117,21 +136,26 @@ namespace Prob
                     case 1:
                         
                         Console.Clear();
+
+                        //Saisie Nb joueurs
                         int nbjoueur = 0;
                         do
                         {
-                            WriteAt("Veuillez entrer le nombre de joueur svp (de 2 à 4): ", 10, 3);
+                            WriteAt("Veuillez entrer le nombre de joueur svp (de 2 à 4): ", 30, 12);
                             nbjoueur = int.Parse(Console.ReadLine());
                             if ((nbjoueur > 4) || (nbjoueur < 2)) 
                             { 
-                                WriteAt("Erreur, nombre invalide", 10, 4);
+                                WriteAt("Erreur, nombre invalide", 30, 13);
                                 Thread.Sleep(1000);
-                                WriteAt("                           ",10, 4); //remplace les espaces
+                                WriteAt("                           ",30, 13); //remplace les espaces
                             }
                         } while ((nbjoueur>4)||(nbjoueur<2));
 
-                        CreationInstances(nbjoueur);
+                        
+                        Joueur [] joueurs = CreationInstances(nbjoueur);
+                        tourDeJeu(joueurs);
 
+                        
                         break;
 
                     case 2:
