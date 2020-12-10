@@ -7,6 +7,7 @@ using System.IO;
 
 namespace Prob
 {
+    //1
     class Dictionnaire
     {
         private string[][] ensembleMot = new string [15][]; //longueur déterminée : 15 tableaux 
