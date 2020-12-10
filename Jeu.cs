@@ -175,11 +175,18 @@ namespace Prob
                         bool tempsValide = false;
                         while (tempsValide == false)
                         {
-                            WriteAt("Veuiller entrer le nombre total de tour de jeu: (minimum 2 tours, le nombre doit être pair)", 30, 12);
+                            WriteAt("                                                                 ", 30, 12);
+                            WriteAt("Veuillez entrer le nombre total de tour de jeu (1 min par tour)", 30, 12);
+                            WriteAt("Exemple : une partie de 6 tours durera 6 min, 3 tours par joueurs", 30, 13);
+                            
+                            WriteAt("(minimum 2 tours, le nombre doit être pair (sinon inégalité) -> ", 30, 14);
                             int nbToursDeJeu = Convert.ToInt32(Console.ReadLine());
                             if (nbToursDeJeu < 2 || nbToursDeJeu % 2 != 0)
                             {
-                                WriteAt("Entrée invalide", 30, 13);
+                                WriteAt("Entrée invalide", 30, 15);
+                                Thread.Sleep(1000);
+                                WriteAt(" ", 70, 14);
+                                WriteAt("               ", 30, 15);
                             }
                             else
                             {
