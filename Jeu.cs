@@ -77,44 +77,51 @@ namespace Prob
             
         }
 
-        static void tourDeJeu (Joueur [] joueur)
+        static void tourDeJeu (Joueur [] joueur, int nbDeToursDeJeu)
         {
-            Stopwatch chrono = new Stopwatch(); //création du chronomètre
+            Stopwatch chronotot = new Stopwatch(); //création du chronomètre total
+            Stopwatch chrono1min = new Stopwatch(); //création du chronomètre pour 1 min
+            int tempsTotal = nbDeToursDeJeu * 60000; //permet d'avoir le temps total en millisecondes 
+            string mots = "";
+            int i = 0;
+            //Pour le plateau
+            char[,] lettre = new char[4, 4];
+            De[] de = new De[16];
+            Plateau plateau = new Plateau(de, lettre);
 
-            string mots;
             Console.Clear();
-            for (int i = 0; i < joueur.Length; i++)
+
+            chronotot.Start(); //démarre le chrono total
+            
+            while (chronotot.ElapsedMilliseconds <tempsTotal) //boucle total
             {
-                //Création plateau qui change a chaque tour 
-                //Dé 
-                //ConsoleKeyInfo cki=Console.ReadKey();
-
+                chrono1min.Start(); //démarre le chrono d'une minute
                 
-                    chrono.Start(); //démarre le chrono
-                    char[,] lettre = new char[4, 4];
-                    De[] de = new De[16];
-                    Plateau plateau = new Plateau(de, lettre);
-                    StreamReader sReader = plateau.OpenFile("Des.txt"); //inutile ici a modif, change a chaque tour
-                    plateau.ReadFile(sReader);                          //idem
-                    WriteAt("Au tour de " + joueur[i].Nom + "\n", 20, 3);
+                StreamReader sReader = plateau.OpenFile("Des.txt"); 
+                plateau.ReadFile(sReader);                          
+                
+                string affichage = plateau.ToString();
+                WriteAt(affichage, 0, 3);
 
-                    string affichage = plateau.ToString();
-                    WriteAt(affichage, 0, 3);
-                    //Console.WriteLine(affichage);
-                    WriteAt("Chronomètre lancé", 20, 5);
-                //cki = Console.ReadKey();
-                while (chrono.ElapsedMilliseconds < 60000) //tant que le chrono est inferieur a 1 min
+                while (chrono1min.ElapsedMilliseconds<60000) //Boucle 1 min
                 {
-                    WriteAt("Saisissez le mot :\n",0, 8);
+
+                    WriteAt("Au tour de " + joueur[i].Nom + "\n", 20, 3);
+                    WriteAt("Chronomètre lancé", 20, 5);
+                    WriteAt("", 0, 8);
+                    Console.WriteLine("Saissisez un mot");
                     mots = Console.ReadLine();
+                   
                 }
                 WriteAt("Fin du temps imparti, au suivant !", 20, 6);
-                Thread.Sleep(1000);
-                chrono.Reset(); //on reset le chrono pour chaque tour
-                //if (i == 1) { i--; }
-
-
+                i++;
+                if (i==joueur.Length) { i = 0; } //si on a fait les n joueurs, on recommence
+                chrono1min.Reset();
+                
             }
+            Console.Clear();
+            Console.WriteLine("Fin du temps imparti !");
+            
 
         }
 
@@ -173,6 +180,7 @@ namespace Prob
 
                         //Saisie du temps de jeu 
                         bool tempsValide = false;
+                        int nbToursDeJeu = 0; ;
                         while (tempsValide == false)
                         {
                             WriteAt("                                                                 ", 30, 12);
@@ -180,7 +188,7 @@ namespace Prob
                             WriteAt("Exemple : une partie de 6 tours durera 6 min, 3 tours par joueurs", 30, 13);
                             
                             WriteAt("(minimum 2 tours, le nombre doit être pair (sinon inégalité) -> ", 30, 14);
-                            int nbToursDeJeu = Convert.ToInt32(Console.ReadLine());
+                            nbToursDeJeu = Convert.ToInt32(Console.ReadLine());
                             if (nbToursDeJeu < 2 || nbToursDeJeu % 2 != 0)
                             {
                                 WriteAt("Entrée invalide", 30, 15);
@@ -196,7 +204,7 @@ namespace Prob
 
                         Joueur [] joueurs = CreationInstances(nbjoueur);
 
-                        tourDeJeu(joueurs);
+                        tourDeJeu(joueurs,nbToursDeJeu);
 
                         
                         break;
