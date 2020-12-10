@@ -151,8 +151,25 @@ namespace Prob
                             }
                         } while ((nbjoueur>4)||(nbjoueur<2));
 
-                        
+
+                        //Saisie du temps de jeu 
+                        bool tempsValide = false;
+                        while (tempsValide == false)
+                        {
+                            WriteAt("Veuiller entrer le nombre total de tour de jeu: (minimum 2 tours, le nombre doit être pair)", 30, 12);
+                            int nbToursDeJeu = Convert.ToInt32(Console.ReadLine());
+                            if (nbToursDeJeu < 2 || nbToursDeJeu % 2 != 0)
+                            {
+                                WriteAt("Entrée invalide", 30, 13);
+                            }
+                            else
+                            {
+                                tempsValide = true;
+                            }
+                        }
+
                         Joueur [] joueurs = CreationInstances(nbjoueur);
+
                         tourDeJeu(joueurs);
 
                         
