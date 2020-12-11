@@ -5,50 +5,48 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Prob
+namespace test_dico
 {
-    //1
     class Dictionnaire
     {
-        private string[][] ensembleMot = new string [15][]; //longueur déterminée : 15 tableaux 
-        private int longeur; //longeur
+
+        private int longueur; //longueur = nb de mots        
         private string langue;
+        private SortedList<int, List<string>> ensembleMot = new SortedList<int, List<string>>();
 
         //constructeur
-         
-        public Dictionnaire (string [][] ensembleMot, string langue)
+
+        public Dictionnaire(SortedList<int, List<string>> ensembleMot, string langue)
         {
             this.ensembleMot = ensembleMot;
             this.langue = langue;
         }
 
-        public string[][] EnsembleMot
+        public SortedList<int, List<string>> EnsembleMot
         {
             get { return this.ensembleMot; }
-            set { this.ensembleMot=value; }
+            set { this.ensembleMot = value; }
         }
         public string Langue
         {
             get { return this.langue; }
-            
+            set { this.langue = value; }
+
         }
 
         public string toString()
         {
-            string res = null;
-            for (int i =0; i<ensembleMot.Length; i++)
+            string chaine = "Langue : " + this.langue + "\nLe dictionnaire contient : \n";
+
+            for (int i = 0; i < this.ensembleMot.Count; i++)
             {
-                //for (int j= 0; j<ensembleMot.GetLength(1); j++)
-                //{
-                    res += ensembleMot[i];
-                //}
-                Console.WriteLine(i + 1 +" :");
+                chaine += this.ensembleMot.Values.Count + " mots avec" + this.ensembleMot.Keys[i] + "lettres\n";
             }
 
-            return "langue : "+ this.langue +", "+ res;
-
+            return chaine;
         }
-        //Pour lire fichier ne mode flux
+
+        //Pour lire fichier en mode flux
         public StreamReader OpenFile(string fileName)
         {
 
@@ -70,41 +68,60 @@ namespace Prob
 
         }
 
-        //vérifie que on a la chaine est un chiffre
+        //vérifie que la chaine est un chiffre
         static bool VerifChiffre(string chaine)
         {
+            bool valeurNum = false;
+            int compteur = chaine.Length;
+
             foreach (char c in chaine)
             {
-                if (c >= '0' && c <= '9')
+                if (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9')
                 {
-                    return true;    //Si tout les caractères sont compris entre 0 ET 9 -> OK
+                    compteur--;    
                 }
             }
-            return false;   //SINON FAUX
+
+            if (compteur == 0) //si le compteur vaut 0 c'est que tous les caracteres testés sont des chiffres => c'est un chiffre/nombre
+            {
+                valeurNum = true;
+            }
+
+            return valeurNum;   //SINON FAUX
         }
 
         //methode lecture dictionnaire
         public void ReadFile(StreamReader sReader)
         {
-            
             string line;
             char[] separateur = { ' ' };
-            int i = 0;
-            
-            //enregistre different tableaux en fonction de la longeur -> tableau de tableaux
+            int nbLettres = -1;
+            List<string> listeTempo = new List<string>();
+
             try
             {
                 while ((line = sReader.ReadLine()) != null)
                 {
-                    string[] tab = line.Split(separateur);
 
-                    for (int j =0; j<tab.Length; j++)
+
+                    if (VerifChiffre(line) == true) // si on detecte un nombre : on met listeTempo dans notre SortedList et on transforme le string detecté en entier pour ensuite l'assigner à un indexeur de notre sortedList 
                     {
-                        if (VerifChiffre(tab[0]) == true) { longeur = int.Parse(tab[0]); }
-                        ensembleMot[longeur][i] = tab[j];
-                        i++;
+                        if (nbLettres >= 1) //pour eviter le 1er tour de boucle
+                        {
+                            this.ensembleMot.Add(nbLettres, listeTempo);
+                        }
+
+                        nbLettres = int.Parse(line);
                     }
-                    
+                    else // si ce n'est pas un chiffre : on sépare dans un tableau chaque mot lu et on copie les données de ce tableau dans une liste, que l'on ajoute ensuite à la sorted liste avec l'indexeur associé
+                    {
+                        string[] tab = line.Split(separateur);
+
+                        foreach (string mot in tab)
+                        {
+                            listeTempo.Add(mot);
+                        }
+                    }
                 }
 
             }
@@ -121,7 +138,7 @@ namespace Prob
         //recherche en récursif;
         public bool RechDichoRecursif(int debut, int fin, string mot)
         {
-            
+
             if (fin < debut) return false; //Erreur de placement des bornes
             int milieu = (debut + fin) / 2;
             int resultat = 0;// string.Compare(mot, ensembleMot[milieu], true);
