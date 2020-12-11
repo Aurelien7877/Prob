@@ -109,6 +109,7 @@ namespace Prob
                         if (nbLettres >= 1) //pour eviter le 1er tour de boucle
                         {
                             this.ensembleMot.Add(nbLettres, listeTempo);
+                            listeTempo.Clear();
                         }
 
                         nbLettres = int.Parse(line);
