@@ -77,6 +77,17 @@ namespace Prob
             
         }
 
+        //méthode de vérification des contraintes
+        static bool verifContraintes (Plateau plateau, string mot) 
+        {
+            if ((plateau.Test_Plateau(mot) == true) && (mot.Length >= 3))//Si adjacent
+            {
+                return true;
+            }
+            else Console.WriteLine("Mot invalide");
+                return false;
+        }
+
         static void tourDeJeu (Joueur [] joueur, int nbDeToursDeJeu)
         {
             Stopwatch chronotot = new Stopwatch(); //création du chronomètre total
@@ -105,15 +116,20 @@ namespace Prob
 
                 while (chrono1min.ElapsedMilliseconds<60000) //Boucle 1 min
                 {
-
+                    WriteAt("                                           ", 20, 3);//pour nettoyer l'affichage
                     WriteAt("Au tour de " + joueur[i].Nom + "\n", 20, 3);
                     WriteAt("Chronomètre lancé", 20, 5);
                     WriteAt("", 0, 8);
                     Console.WriteLine("Saissisez un mot");
                     mots = Console.ReadLine();
+                    if (verifContraintes(plateau,mots)==true)
+                    {
+                        joueur[i].Score += mots.Length - 1;
+                        Console.WriteLine("Score de " + joueur[i].Nom + " = " + joueur[i].Score);
+                    }
                    
                 }
-                WriteAt("Fin du temps imparti, au suivant !", 20, 6);
+                Console.WriteLine("Fin du temps imparti, au suivant !");
                 i++;
                 if (i==joueur.Length) { i = 0; } //si on a fait les n joueurs, on recommence
                 chrono1min.Reset();
