@@ -33,6 +33,18 @@ namespace Prob
         protected static int origCol;           //docs.microsoft.com/fr-fr/dotnet/api/system.console.setcursorposition?
                                                 //view=netcore-3.1
 
+              
+
+        static Dictionnaire CreationDico()
+        {
+            string langue = "Français";
+            string[] ensembleMots = null;
+            Dictionnaire mondico = new Dictionnaire(ensembleMots, langue);
+            mondico.ReadFile(mondico.OpenFile("MotsPossibles.txt"));
+            return mondico;
+        }
+
+
 
         protected static void WriteAt(string s, int x, int y)       //Fonction de position de curseur issue de microsoft.com
         {
@@ -73,7 +85,8 @@ namespace Prob
                
             }
             return joueurs;
-            //Dictionnaire[] mondico = new Dictionnaire(mot,langue);  
+
+              
             
         }
 
