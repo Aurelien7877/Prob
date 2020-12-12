@@ -100,7 +100,7 @@ namespace Prob
                 //on remplit le tableau de la classe
                 for (int i = 0; i < longueur; i++)
                 {
-                    this.ensembleMot[i] = liste[i];
+                    EnsembleMot[i] = liste[i];
                 }
 
 
@@ -124,7 +124,7 @@ namespace Prob
         public int CompteurDeMots(int nombreDeLettres)
         {
             int compteur = 0;
-            foreach (string mot in this.ensembleMot)
+            foreach (string mot in EnsembleMot)
             {
                 if (mot.Length == nombreDeLettres)
                 {
@@ -137,7 +137,7 @@ namespace Prob
 
         public string toString()
         {
-            string chaine = "Langue : " + this.langue + "\nLe dictionnaire contient : \n";
+            string chaine = "Langue : " + Langue + "\nLe dictionnaire contient : \n";
 
             for (int i = 0; i < 16; i++)
             {
@@ -147,20 +147,66 @@ namespace Prob
             return chaine;
         }
 
+        public string[] TriAlphabetique()
+        {
+            //on copie le ensembleMots dans un tableau
+            string[] tab = new string[EnsembleMot.Length];
+            for(int i = 0; i < tab.Length; i++)
+            {
+                tab[i] = EnsembleMot[i];
+            }
+
+            //tri
+            string memoire = " ";
+            for (int i = 0; i < tab.Length; i++)
+            {
+                string chaine = tab[i];
+                int position = i;
+
+                for (int j = 1 + i; j < tab.Length; j++)
+                {
+                    if (String.Compare(tab[j], chaine) < 0)
+                    {
+                        chaine = tab[j];
+                        position = j;
+                    }
+                }
+                memoire = tab[i];
+                tab[i] = tab[position];
+                tab[position] = memoire;
+            }
+            return tab;
+        }
+
 
         //recherche en récursif;
         public bool RechDichoRecursif(int debut, int fin, string mot)
         {
 
-            if (fin < debut) return false; //Erreur de placement des bornes
             int milieu = (debut + fin) / 2;
-            int resultat = 0;// string.Compare(mot, ensembleMot[milieu], true);
-            if (resultat == 0) return true;
-            if (resultat < 0) fin = milieu - 1;
-            if (resultat > 0) debut = milieu + 1;
-            else return RechDichoRecursif(debut, fin, mot);
-            return false;
 
+            int comparaison = String.Compare(mot, TriAlphabetique()[milieu]); //on compare le mot avec le mot situé au milieu du tableau contenant l'ensemble des mots et trié par ordre alphabetique
+
+            if (comparaison != 0 && debut==fin)
+            {
+                return false;
+            }
+            else if (comparaison < 0) //=> mot est avant TriAlphabetique()[milieu] => fin = milieu-1;
+            {                
+                return RechDichoRecursif(debut, milieu -1, mot);
+            }
+            else if(comparaison > 0)//=> mot est apres TriAlphabetique()[milieu] => debut = milieu+1;
+            {
+                return RechDichoRecursif(milieu+1, fin, mot);
+            }
+            else if(comparaison == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
     }
