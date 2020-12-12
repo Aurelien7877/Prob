@@ -121,7 +121,7 @@ namespace Prob
                     WriteAt("Chronomètre lancé", 20, 5);
                     WriteAt("", 0, 8);
                     Console.WriteLine("Saissisez un mot");
-                    mots = Console.ReadLine();
+                    mots = Convert.ToString(Console.ReadLine()).ToUpper();
                     if (verifContraintes(plateau,mots)==true)
                     {
                         joueur[i].Score += mots.Length - 1;
@@ -226,14 +226,23 @@ namespace Prob
                         break;
 
                     case 2:
-                        
+                        Console.Clear();
+                        string regles = "Au début de chaque tour, 16 dés à 6 faces différentes et réprésentant des lettres sont lancés. Un plateau 4x4 représente alors ce lancer.\n" +
+                            "Un compte à rebours défini par l'utilisateur se lance alors pour chronométrer l'entiereté de la partie. \n" +
+                            "Chaque joueur joue l’un après l’autre pendant un laps de temps de 1 mn.\n\n\n" +
+                            "Le but du jeu est de trouver les mots formés sur le plateau.\n" +
+                            " Ceux-ci doivent respecter les règles suivantes pour être validés : \n\n" +
+                            "-Un mot doit être composé de 3 lettres minimum.\n" +
+                            "-Les lettres consécutives d'un mot doivent être adjacentes sur le plateau \n" +
+                            "(que ce soit horizontalement, verticalement ou en diagonalement).\n" +
+                            "-Chaque mot trouvé et validé rapporte des points selon sa longueur.\n" +
+                            "-Les mots peuvent être au singulier ou au pluriel, conjugués ou non, \n" +
+                            "mais ne doivent pas utiliser plusieurs fois le même dé pour le même mot.\n" +
+                            "-Enfin, un mot ne sera accepté qu'une fois pour un même joueur.";
+                        Console.WriteLine(regles);
                         break;
 
                     case 3:
-                        
-                        break;
-
-                    case 4:
                         
                         break;
                 }
