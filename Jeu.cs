@@ -151,9 +151,9 @@ namespace Prob
         }
 
         //méthode de vérification des contraintes
-        static bool verifContraintes (Plateau plateau, string mot) 
+        static bool verifContraintes (Plateau plateau, char [] mot) 
         {
-            if ((plateau.Test_Plateau(mot) == true) && (mot.Length >= 3))//Si adjacent
+            if ((plateau.Test_Plateau(mot) == true) && (mot.Length >= 3))//Si adjacent, longueur et dico a rajouter
             {
                 return true;
             }
@@ -195,7 +195,9 @@ namespace Prob
                     WriteAt("", 0, 8);
                     Console.WriteLine("Saissisez un mot");
                     mots = Convert.ToString(Console.ReadLine()).ToUpper();
-                    if (verifContraintes(plateau,mots)==true && mots.Length>2)
+                    char[] motTemp = new char[mots.Length];
+                    for (int j = 0; j < mots.Length; j++) { motTemp[j] = mots.ToCharArray()[j]; } //transforme le mot en tab de carac
+                    if (verifContraintes(plateau,motTemp)==true)
                     {
                         joueur[i].Score += mots.Length - 1;
                         Console.WriteLine("Score de " + joueur[i].Nom + " = " + joueur[i].Score);
@@ -316,8 +318,7 @@ namespace Prob
                         break;
 
                     case 3:
-                        Dictionnaire mondico = CreationDico();
-                        Console.WriteLine(mondico.ToString());
+                        
                         break;
                 }
                 Console.WriteLine("Tapez Escape pour sortir ou un numero d'action");
