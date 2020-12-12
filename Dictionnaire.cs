@@ -102,13 +102,6 @@ namespace Prob
                 {
                     EnsembleMot[i] = liste[i];
                 }
-
-
-                //foreach (string mot in this.ensembleMot)
-                //{
-                //    Console.WriteLine(mot);
-                //}
-
             }
             catch (Exception e)
             {
@@ -143,7 +136,6 @@ namespace Prob
             {
                 chaine += CompteurDeMots(i) + " mots avec" + i + "lettres\n";
             }
-
             return chaine;
         }
 
