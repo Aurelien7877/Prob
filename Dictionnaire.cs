@@ -132,7 +132,7 @@ namespace Prob
         {
             string chaine = "Langue : " + Langue + "\nLe dictionnaire contient : \n";
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 2; i < 16; i++)
             {
                 chaine += CompteurDeMots(i) + " mots avec" + i + "lettres\n";
             }
