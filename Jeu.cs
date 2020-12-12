@@ -122,7 +122,7 @@ namespace Prob
                     WriteAt("", 0, 8);
                     Console.WriteLine("Saissisez un mot");
                     mots = Convert.ToString(Console.ReadLine()).ToUpper();
-                    if (verifContraintes(plateau,mots)==true)
+                    if (verifContraintes(plateau,mots)==true && mots.Length>2)
                     {
                         joueur[i].Score += mots.Length - 1;
                         Console.WriteLine("Score de " + joueur[i].Nom + " = " + joueur[i].Score);
