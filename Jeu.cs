@@ -33,14 +33,74 @@ namespace Prob
         protected static int origCol;           //docs.microsoft.com/fr-fr/dotnet/api/system.console.setcursorposition?
                                                 //view=netcore-3.1
 
-              
+
+        static public StreamReader OpenFile(string fileName)
+        {
+            StreamReader sReader = null;
+            try
+            {
+                sReader = new StreamReader(fileName);
+
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return sReader;
+        }
+
+        //methode lecture dictionnaire
+        static public string[] ReadFile(StreamReader sReader)
+        {
+            string line;
+            char separateur = ' ';
+            List<string> liste = new List<string>();
+
+            try
+            {
+                //on met tous les mots dans une liste
+                while ((line = sReader.ReadLine()) != null)
+                {
+                    string[] tab = line.Split(separateur);
+
+                    foreach (string mot in tab)
+                    {
+                        liste.Add(mot);
+                    }
+                }
+
+                //on recupere la longueur de la liste
+                int longueur = liste.Count;
+                string[] tableauFinal = new string[longueur];
+
+                //on remplit le tableau de la classe
+                for (int i = 0; i < longueur; i++)
+                {
+                    tableauFinal[i] = liste[i];
+                }
+                return tableauFinal;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+            finally
+            {
+                if (sReader != null) sReader.Close();
+            }
+        }
 
         static Dictionnaire CreationDico()
         {
             string langue = "Français";
-            string[] ensembleMots = null;
+            string[] ensembleMots = ReadFile(OpenFile("MotsPossibles.txt"));
             Dictionnaire mondico = new Dictionnaire(ensembleMots, langue);
-            mondico.ReadFile(mondico.OpenFile("MotsPossibles.txt"));
+            
             return mondico;
         }
 
@@ -256,7 +316,8 @@ namespace Prob
                         break;
 
                     case 3:
-                        
+                        Dictionnaire mondico = CreationDico();
+                        Console.WriteLine(mondico.ToString());
                         break;
                 }
                 Console.WriteLine("Tapez Escape pour sortir ou un numero d'action");

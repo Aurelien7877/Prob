@@ -11,7 +11,7 @@ namespace Prob
     {
         static private int longueur; //longueur = nb de mots        
         private string langue;
-        private string[] ensembleMot = new string[longueur];
+        private string[] ensembleMot = ReadFile(OpenFile("MotsPossibles.txt"));
 
 
         //constructeur
@@ -33,7 +33,7 @@ namespace Prob
         }
 
 
-        public StreamReader OpenFile(string fileName)
+        static public StreamReader OpenFile(string fileName)
         {
             StreamReader sReader = null;
             try
@@ -75,7 +75,7 @@ namespace Prob
         }
 
         //methode lecture dictionnaire
-        public void ReadFile(StreamReader sReader)
+        static public string[] ReadFile(StreamReader sReader)
         {
             string line;
             char separateur = ' ';
@@ -96,16 +96,19 @@ namespace Prob
 
                 //on recupere la longueur de la liste
                 longueur = liste.Count;
+                string[] tableauFinal = new string[longueur];
 
                 //on remplit le tableau de la classe
                 for (int i = 0; i < longueur; i++)
                 {
-                    EnsembleMot[i] = liste[i];
+                    tableauFinal[i] = liste[i];
                 }
+                return tableauFinal;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                return null;
             }
             finally
             {
