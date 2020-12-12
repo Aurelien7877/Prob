@@ -32,7 +32,7 @@ namespace Prob
             set { this.langue = value; }
         }
 
-
+        
         static public StreamReader OpenFile(string fileName)
         {
             StreamReader sReader = null;
@@ -142,6 +142,7 @@ namespace Prob
             return chaine;
         }
 
+        //tri test 1 (non fonctionnel)
         public string[] TriAlphabetique()
         {
             //on copie le ensembleMots dans un tableau
@@ -173,14 +174,27 @@ namespace Prob
             return tab;
         }
 
+        //test tri fonctionnel
+        public string[] triArray()
+        {
+            string[] tab = new string[EnsembleMot.Length];
+            for (int i = 0; i < tab.Length; i++)
+            {
+                tab[i] = EnsembleMot[i];
+            }
+            Array.Sort(tab);
+            return tab;
+        }
 
-        //recherche en récursif;
+
+        //recherche en récursif; Fonctionnel
         public bool RechDichoRecursif(int debut, int fin, string mot)
         {
 
             int milieu = (debut + fin) / 2;
+            Console.WriteLine(milieu);
 
-            int comparaison = String.Compare(mot, TriAlphabetique()[milieu]); //on compare le mot avec le mot situé au milieu du tableau contenant l'ensemble des mots et trié par ordre alphabetique
+            int comparaison = String.Compare(mot, triArray()[milieu]); //on compare le mot avec le mot situé au milieu du tableau contenant l'ensemble des mots et trié par ordre alphabetique
 
             if (comparaison != 0 && debut==fin)
             {
@@ -203,6 +217,9 @@ namespace Prob
                 return false;
             }
         }
+
+       
+        
 
     }
 }
