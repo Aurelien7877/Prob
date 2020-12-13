@@ -142,38 +142,7 @@ namespace Prob
             return chaine;
         }
 
-        //tri test 1 (non fonctionnel)
-        public string[] TriAlphabetique()
-        {
-            //on copie le ensembleMots dans un tableau
-            string[] tab = new string[EnsembleMot.Length];
-            for(int i = 0; i < tab.Length; i++)
-            {
-                tab[i] = EnsembleMot[i];
-            }
-
-            //tri
-            string memoire = " ";
-            for (int i = 0; i < tab.Length; i++)
-            {
-                string chaine = tab[i];
-                int position = i;
-
-                for (int j = 1 + i; j < tab.Length; j++)
-                {
-                    if (String.Compare(tab[j], chaine) < 0)
-                    {
-                        chaine = tab[j];
-                        position = j;
-                    }
-                }
-                memoire = tab[i];
-                tab[i] = tab[position];
-                tab[position] = memoire;
-            }
-            return tab;
-        }
-
+       
         //test tri fonctionnel
         public string[] triArray()
         {

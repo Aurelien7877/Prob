@@ -12,7 +12,7 @@ namespace Prob
         //attributs
         private string nom;
         private int score;
-        private List<string> motTrouves;
+        private List<string> motTrouves = new List<string>();
 
         //Constructeur
         public Joueur (string nom, int score, List<string> motTrouves)
@@ -65,10 +65,10 @@ namespace Prob
         //décrit un joueur
         public string toString()
         {
-            string liste=null;
-            for (int i =0; i<motTrouves.Count; i++)
+            string liste = "";
+            for (int i =0; i<this.motTrouves.Count; i++)
             {
-                liste = motTrouves[i] + ", ";
+                liste += this.motTrouves[i] + ", ";
             }
             string res = "Joueur : " + this.nom + " | Score : " + this.score + "\nMots trouvés par ce joueur : " + liste;
             return res;

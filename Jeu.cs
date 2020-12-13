@@ -29,9 +29,6 @@ namespace Prob
             return choix;
         }
 
-        protected static int origRow;           //Fonction position curseur issue de
-        protected static int origCol;           //docs.microsoft.com/fr-fr/dotnet/api/system.console.setcursorposition?
-                                                //view=netcore-3.1
        
 
 
@@ -106,6 +103,9 @@ namespace Prob
         }
 
 
+        protected static int origRow;           //Fonction position curseur issue de
+        protected static int origCol;           //docs.microsoft.com/fr-fr/dotnet/api/system.console.setcursorposition?
+                                                //view=netcore-3.1
 
         protected static void WriteAt(string s, int x, int y)       //Fonction de position de curseur issue de microsoft.com
         {
@@ -132,7 +132,7 @@ namespace Prob
 
             //joueur
             int score = 0;
-            List<string> motTrouves = new List<string>(100);
+            
             Joueur[] joueurs = new Joueur[nbjoueur];
 
             //PSeudo des n joueurs
@@ -140,7 +140,7 @@ namespace Prob
             {
                 WriteAt("Pseudo joueur " +i+" : ", 30, 12);
                 string nom = Console.ReadLine();        //on créé n instances de joueurs
-
+                List<string> motTrouves = new List<string>(100);
                 Console.Clear();
                 joueurs[i-1] = new Joueur(nom, score, motTrouves);
                
@@ -179,10 +179,25 @@ namespace Prob
             return false;
         }
 
+        //méthode de calcul du score en fonction de l'énoncé
+        static int calculScore(string mot)
+        {
+            int score = 0;
+            if ((mot.Length>=3)&&(mot.Length<=6)) 
+            {
+                score = mot.Length - 1;
+            }
+            if (mot.Length>=7)
+            {
+                score = 11;
+            }
+            return score;
+        }
 
         //Déroulement du jeu
-        static void tourDeJeu (Joueur [] joueur, int nbDeToursDeJeu)
+        static void tourDeJeu (Joueur [] joueur, int nbDeToursDeJeu,int nbjoueur)
         {
+            //initialisation
             Stopwatch chronotot = new Stopwatch(); //création du chronomètre total
             Stopwatch chrono1min = new Stopwatch(); //création du chronomètre pour 1 min
             int tempsTotal = nbDeToursDeJeu * 60000; //permet d'avoir le temps total en millisecondes 
@@ -202,7 +217,7 @@ namespace Prob
                 Console.Clear();
                 chrono1min.Start(); //démarre le chrono d'une minute
                 
-                StreamReader sReader = plateau.OpenFile("Des.txt"); 
+                StreamReader sReader = plateau.OpenFile("Des.txt"); //on lit le plateau
                 plateau.ReadFile(sReader);                          
                 
                 string affichage = plateau.ToString();
@@ -210,25 +225,25 @@ namespace Prob
 
                 while (chrono1min.ElapsedMilliseconds<60000) //Boucle 1 min
                 {
-                    WriteAt("                                      ", 0, 11);
-                    WriteAt("                  ", 0, 9);
-                    WriteAt("                                           ", 20, 3);  //pour nettoyer l'affichage
+                    WriteAt("                                      ", 0, 11); //pour nettoyer l'affichage
+                    WriteAt("                  ", 0, 9);                        //
+                    WriteAt("                                           ", 20, 3);  //
                     WriteAt("             ", 0, 10);                                //idem
                     WriteAt("Au tour de " + joueur[i].Nom + "\n", 20, 3);
                     WriteAt("Chronomètre lancé", 20, 5);
                     WriteAt("", 0, 8);
                     Console.WriteLine("Saissisez un mot");                   
-                    mots = Convert.ToString(Console.ReadLine()).ToUpper();
+                    mots = Convert.ToString(Console.ReadLine()).ToUpper(); //ToUpper car les mots du dico sont en maj
 
-                    if ((verifContraintes(plateau, mots) == true)&&(joueur[i].MotTrouves.Contains(mots))==false) //si ca contient pas déja le mot
+                    if ((verifContraintes(plateau, mots) == true)&&(joueur[i].Contain(mots)==false)) //si le joueur n'a pas encore dit le mot + toutes les contraintes
                     {
-                        joueur[i].Score += mots.Length - 1;
-                        joueur[i].MotTrouves.Add(mots);             //on add le mot trouvé a la liste
+                        joueur[i].Score += calculScore(mots);       //appel de la méthode calcul score
+                        joueur[i].Add_Mot(mots);                    //on add le mot trouvé a la liste des mots trouvés
                         WriteAt("Score de " + joueur[i].Nom + " = " + joueur[i].Score, 20, 7);
                         WriteAt("                      ", 20, 9);
                         WriteAt("Mot valide :D ", 20, 9);
                     }
-                    else
+                    else                                            //si mot pas valide
                     {
                         WriteAt("                      ", 20, 9);
                         WriteAt("Mot invalide :(", 20, 9);
@@ -241,13 +256,30 @@ namespace Prob
                 WriteAt("                                       ", 0, 13);
                 WriteAt("                            ", 20, 7);
 
-                i++;
-                if (i==joueur.Length) { i = 0; } //si on a fait les n joueurs, on recommence
+                i++;                                //pour passer au joueur d'apres
+                if (i==nbjoueur) { i = 0; } //si on a fait les n joueurs, on recommence
                 chrono1min.Reset();                 //reset d'une chrono de 1 min
                 
             }
             Console.Clear();
-            Console.WriteLine("Fin du temps imparti !");
+            WriteAt("Fin du temps imparti !", 45, 10);
+            Thread.Sleep(1000);
+            Console.Clear();
+            Console.WriteLine("Récapitulatif : ");
+            int indiceGagnant = 0;
+            int scoreGagnant = 0;
+            for (int k =0; k<nbjoueur; k++)
+            {
+                           
+                Console.WriteLine(joueur[k].toString());
+                if (joueur[k].Score>scoreGagnant) //pour trouver le score max
+                {
+                    scoreGagnant = joueur[k].Score;
+                    indiceGagnant = k;
+                }              
+            }
+            Console.WriteLine("Le vainqueur est ...... " + joueur[indiceGagnant].Nom + "\nFélicitations !!");
+            
             
 
         }
@@ -331,7 +363,7 @@ namespace Prob
 
                         Joueur [] joueurs = CreationInstances(nbjoueur);
 
-                        tourDeJeu(joueurs,nbToursDeJeu);
+                        tourDeJeu(joueurs,nbToursDeJeu,nbjoueur);
 
                         
                         break;
