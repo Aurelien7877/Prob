@@ -170,7 +170,7 @@ namespace Prob
                 if (verifAdjacence==true) //si adjacence ok
                 {
                     bool verifDico = mondico.RechDichoRecursif(debut, fin, mot);
-                    if (verifDico==true) //si appartient au dico
+                    if (verifDico== true) //si appartient au dico
                     {
                         return true;
                     }
@@ -286,7 +286,7 @@ namespace Prob
 
         static void Main(string[] args)
         {
-            //Console.WriteLine(Console.LargestWindowHeight); //41 Mesires max de la fenetre (de mon ordi donc on met des valeures inf)
+            //Console.WriteLine(Console.LargestWindowHeight); //41 Mesures max de la fenetre (de mon ordi donc on met des valeures inf)
             //Console.WriteLine(Console.LargestWindowWidth); //171
             Console.WindowHeight = 28; //y
             Console.WindowWidth = 120;//x
@@ -318,6 +318,7 @@ namespace Prob
                 Console.WriteLine();
                 switch (exo) 
                 {
+                    //cas jeu
                     case 1:
                         
                         Console.Clear();
@@ -361,44 +362,33 @@ namespace Prob
                             }
                         }
 
-                        Joueur [] joueurs = CreationInstances(nbjoueur);
+                        Joueur [] joueurs = CreationInstances(nbjoueur); //création des instances
 
-                        tourDeJeu(joueurs,nbToursDeJeu,nbjoueur);
+                        tourDeJeu(joueurs,nbToursDeJeu,nbjoueur);       //déroulement de la partie
 
                         
                         break;
-
+                    //cas regle
                     case 2:
                         Console.Clear();
-                        string regles = "Au début de chaque tour, 16 dés à 6 faces différentes et réprésentant des lettres sont lancés. Un plateau 4x4 représente alors ce lancer.\n" +
+                        string regles = "Au début de chaque tour, 16 dés à 6 faces différentes et réprésentant des lettres sont lancés.\nUn plateau 4x4 représente alors ce lancer.\n" +
                             "Un compte à rebours défini par l'utilisateur se lance alors pour chronométrer l'entiereté de la partie. \n" +
                             "Chaque joueur joue l’un après l’autre pendant un laps de temps de 1 mn.\n\n\n" +
                             "Le but du jeu est de trouver les mots formés sur le plateau.\n" +
-                            " Ceux-ci doivent respecter les règles suivantes pour être validés : \n\n" +
+                            "Ceux-ci doivent respecter les règles suivantes pour être validés : \n\n" +
                             "-Un mot doit être composé de 3 lettres minimum.\n" +
                             "-Les lettres consécutives d'un mot doivent être adjacentes sur le plateau \n" +
                             "(que ce soit horizontalement, verticalement ou en diagonalement).\n" +
                             "-Chaque mot trouvé et validé rapporte des points selon sa longueur.\n" +
                             "-Les mots peuvent être au singulier ou au pluriel, conjugués ou non, \n" +
                             "mais ne doivent pas utiliser plusieurs fois le même dé pour le même mot.\n" +
-                            "-Enfin, un mot ne sera accepté qu'une fois pour un même joueur.";
+                            "-Enfin, un mot ne sera accepté qu'une fois pour un même joueur.\n\n";
                         Console.WriteLine(regles);
                         break;
-
+                    //cas quitter
                     case 3:
-                        Dictionnaire mondico = CreationDico();
-                        string affichage = mondico.toString();
-                        Console.WriteLine(affichage);
-                        Console.WriteLine("Entrer un mot pour savoir si il appartient au dico");
-                        string mot = Console.ReadLine().ToUpper();
-                        int debut = 0;
-                        int fin = mondico.EnsembleMot.Length;
-                        Console.WriteLine("fin =" + fin);
-                        //string[] tab = mondico.triArray(); TRI OK
-                        
-                        bool verif = mondico.RechDichoRecursif(debut, fin, mot); //OKKKK
-                        if (verif == true) Console.WriteLine("trouvé");
-                        else Console.WriteLine("pas trouvé");
+                        Console.Clear();
+                        System.Environment.Exit(1);         //Pur tout quitter d'un coup
                         break;
                 }
                 Console.WriteLine("Tapez Escape pour sortir ou un numero d'action");
