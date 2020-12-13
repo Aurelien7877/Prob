@@ -192,7 +192,7 @@ namespace Prob
         {
 
             int milieu = (debut + fin) / 2;
-            Console.WriteLine(milieu);
+           
 
             int comparaison = String.Compare(mot, triArray()[milieu]); //on compare le mot avec le mot situé au milieu du tableau contenant l'ensemble des mots et trié par ordre alphabetique
 

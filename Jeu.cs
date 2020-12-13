@@ -32,6 +32,7 @@ namespace Prob
         protected static int origRow;           //Fonction position curseur issue de
         protected static int origCol;           //docs.microsoft.com/fr-fr/dotnet/api/system.console.setcursorposition?
                                                 //view=netcore-3.1
+       
 
 
         static public StreamReader OpenFile(string fileName)
@@ -144,29 +145,42 @@ namespace Prob
                 joueurs[i-1] = new Joueur(nom, score, motTrouves);
                
             }
-            return joueurs;
-
-              
-            
+            return joueurs;           
         }
 
         //méthode de vérification des contraintes
         static bool verifContraintes (Plateau plateau, string mot) 
         {
+            //Initialisation pour les contraintes
             Dictionnaire mondico = CreationDico();
             int debut = 0;
             int fin = mondico.EnsembleMot.Length;
-
-
-            /*if ((plateau.Test_Plateau(mot) == true) && (mot.Length >= 3))//Si adjacent, longueur et dico a rajouter
+            int incrementeurLettre = 0;
+            
+            List<List<int[]>> listePositionsGlobal=new List<List<int[]>>();
+            List<int[]> listePositionsUtilisees = new List<int[]>();
+            
+            WriteAt("Vérification ....patientez svp....",0,11);
+            
+            
+            //pour aller au plus vite et ne pas chercher 10 secondes un mot d'une lettre, containtes dans ordre croissant de temps pris
+            if (mot.Length >= 3)//si longueur ok
             {
-                return true;
-            }*/
-            if (mondico.RechDichoRecursif(debut, fin, mot) == true) { return true; }
-            else Console.WriteLine("Mot invalide");
-                return false;
+                bool verifAdjacence = plateau.Test_Plateau(mot, incrementeurLettre, listePositionsGlobal, listePositionsUtilisees);
+                if (verifAdjacence==true) //si adjacence ok
+                {
+                    bool verifDico = mondico.RechDichoRecursif(debut, fin, mot);
+                    if (verifDico==true) //si appartient au dico
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
+
+        //Déroulement du jeu
         static void tourDeJeu (Joueur [] joueur, int nbDeToursDeJeu)
         {
             Stopwatch chronotot = new Stopwatch(); //création du chronomètre total
@@ -196,29 +210,40 @@ namespace Prob
 
                 while (chrono1min.ElapsedMilliseconds<60000) //Boucle 1 min
                 {
-                    WriteAt("                                           ", 20, 3);//pour nettoyer l'affichage
+                    WriteAt("                                      ", 0, 11);
+                    WriteAt("                  ", 0, 9);
+                    WriteAt("                                           ", 20, 3);  //pour nettoyer l'affichage
+                    WriteAt("             ", 0, 10);                                //idem
                     WriteAt("Au tour de " + joueur[i].Nom + "\n", 20, 3);
                     WriteAt("Chronomètre lancé", 20, 5);
                     WriteAt("", 0, 8);
-                    Console.WriteLine("Saissisez un mot");
+                    Console.WriteLine("Saissisez un mot");                   
                     mots = Convert.ToString(Console.ReadLine()).ToUpper();
-                    char[] motTemp = new char[mots.Length];
-                    for (int j = 0; j < mots.Length; j++) { motTemp[j] = mots.ToCharArray()[j]; } //transforme le mot en tab de carac
-                    if (verifContraintes(plateau,mots)==true)
+
+                    if ((verifContraintes(plateau, mots) == true)&&(joueur[i].MotTrouves.Contains(mots))==false) //si ca contient pas déja le mot
                     {
                         joueur[i].Score += mots.Length - 1;
-                        WriteAt("Score de " + joueur[i].Nom + " = " + joueur[i].Score,20,7);
+                        joueur[i].MotTrouves.Add(mots);             //on add le mot trouvé a la liste
+                        WriteAt("Score de " + joueur[i].Nom + " = " + joueur[i].Score, 20, 7);
+                        WriteAt("                      ", 20, 9);
+                        WriteAt("Mot valide :D ", 20, 9);
                     }
-                   
+                    else
+                    {
+                        WriteAt("                      ", 20, 9);
+                        WriteAt("Mot invalide :(", 20, 9);
+                        
+                    }
+                    
                 }
-                WriteAt("Fin du temps imparti, au suivant !",20,8);
+                WriteAt("Fin du temps imparti, au suivant !",0,13);
                 Thread.Sleep(1000);
-                WriteAt("                                       ", 20, 8);
+                WriteAt("                                       ", 0, 13);
                 WriteAt("                            ", 20, 7);
 
                 i++;
                 if (i==joueur.Length) { i = 0; } //si on a fait les n joueurs, on recommence
-                chrono1min.Reset();
+                chrono1min.Reset();                 //reset d'une chrono de 1 min
                 
             }
             Console.Clear();
@@ -333,7 +358,7 @@ namespace Prob
                         string affichage = mondico.toString();
                         Console.WriteLine(affichage);
                         Console.WriteLine("Entrer un mot pour savoir si il appartient au dico");
-                        string mot = Console.ReadLine();
+                        string mot = Console.ReadLine().ToUpper();
                         int debut = 0;
                         int fin = mondico.EnsembleMot.Length;
                         Console.WriteLine("fin =" + fin);

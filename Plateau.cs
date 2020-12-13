@@ -115,58 +115,6 @@ namespace Prob
             }
         }
 
-        //ici en non récursif
-        public bool Test_Plateau(char[] mot)//Contrainte d'adjacence : horizontale, verticale + diagonale 
-        {
-            int ligne = 0;
-            int colonne = 0;
-            int nbLettreTrouvees = 0;
-            int compteurtemp = 0;
-            for (int z = 0; z<mot.Length; z++) //on parcourt le mot lettre par lettre sauf la premiere
-            {
-                for (int i = 0; i < lettresTirees.GetLength(0); i++) //parcourt le plateau
-                {
-                    for (int j = 0; j < lettresTirees.GetLength(1); j++)
-                    {
-
-                        if ((mot[0] == lettresTirees[i, j])&&(compteurtemp==0)) //quand on trouve la premiere lettre et bien qu'une fois
-                        {
-                            nbLettreTrouvees++;//on incrémente de 1
-                            ligne = i;
-                            colonne = j;
-                            compteurtemp++;
-                            //if (compteurtemp > 1) { nbLettreTrouvees--; }
-                        }
-
-                        //Quand on trouve une lettre
-                        //droite
-                        if ((colonne + 1 < lettresTirees.GetLength(1))&&(mot[z] == lettresTirees[ligne, colonne + 1])) { nbLettreTrouvees++; colonne ++; }
-                        //diag bas droite
-                        if ((colonne + 1 < lettresTirees.GetLength(1)) && (ligne + 1 < lettresTirees.GetLength(0))&& (mot[z] == lettresTirees[ligne + 1, colonne + 1])) { nbLettreTrouvees++; colonne++; ligne++; }
-                        //bas
-                        if ((ligne + 1 < lettresTirees.GetLength(0))&& (mot[z] == lettresTirees[ligne + 1, colonne])) { nbLettreTrouvees++; ligne++; }
-                        //diag bas gauche
-                        if ((ligne + 1 < lettresTirees.GetLength(0)) && (colonne - 1 >= 0)&&(mot[z] == lettresTirees[ligne + 1, colonne - 1])) { nbLettreTrouvees++; ligne++; colonne--; }
-                        //gauche
-                        if ((colonne - 1 >= 0)&& (mot[z] == lettresTirees[ligne, colonne - 1])) { nbLettreTrouvees++; colonne--; }
-                        //diag haut gauche
-                        if ((colonne - 1 >= 0) && (ligne - 1 >= 0)&& (mot[z] == lettresTirees[ligne - 1, colonne - 1])) { nbLettreTrouvees++;ligne--;colonne--; }
-                        //haut
-                        if ((ligne - 1 >= 0)&& (mot[z] == lettresTirees[ligne - 1, colonne])) { nbLettreTrouvees++; ligne--; }
-                        //diag haut droite
-                        if ((ligne - 1 >= 0) && (colonne + 1 < lettresTirees.GetLength(1))&& (mot[z] == lettresTirees[ligne - 1, colonne + 1])) { nbLettreTrouvees++; ligne--;colonne++; }
-                                                                                         
-                    }
-                }
-            }
-            Console.WriteLine(nbLettreTrouvees); //test
-            if (nbLettreTrouvees == mot.Length) { return true; }    //si on a bien trouvé toutes les lettres, true
-            else return false;                                      //sinon faux
-            
-        }
-
-
-
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // Condition d'adjacence à revoir sur la colonne droite (verifier sur les autres aussi
