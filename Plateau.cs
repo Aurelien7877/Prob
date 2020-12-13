@@ -116,490 +116,53 @@ namespace Prob
         }
 
         //ici en non récursif
-        public bool Test_Plateau(string mot)//Contrainte d'adjacence : horizontale, verticale + diagonale 
+        public bool Test_Plateau(char[] mot)//Contrainte d'adjacence : horizontale, verticale + diagonale 
         {
+            int ligne = 0;
+            int colonne = 0;
             int nbLettreTrouvees = 0;
-            for (int i = 0; i < lettresTirees.GetLength(0); i++) //parcourt le plateau
+            int compteurtemp = 0;
+            for (int z = 0; z<mot.Length; z++) //on parcourt le mot lettre par lettre sauf la premiere
             {
-                for (int j = 0; j < lettresTirees.GetLength(1); j++)
+                for (int i = 0; i < lettresTirees.GetLength(0); i++) //parcourt le plateau
                 {
-                    
-                        if (mot[0] == lettresTirees[i, j]) //quand on trouve la premiere lettre
+                    for (int j = 0; j < lettresTirees.GetLength(1); j++)
+                    {
+
+                        if ((mot[0] == lettresTirees[i, j])&&(compteurtemp==0)) //quand on trouve la premiere lettre et bien qu'une fois
                         {
                             nbLettreTrouvees++;//on incrémente de 1
-                            mot = mot.Substring(1, mot.Length); //sert pour le recursif
-                            for (int k =1; k<mot.Length-1; k++) 
-                            {
-                            //voisin de droite
-                            if ((j + 1 < lettresTirees.GetLength(1))) //verif sort pas du plateau
-                            {
-
-                                if (lettresTirees[i, j + 1] == mot[k + 1]) //si +1 trouvée etc..
-                                {
-                                    nbLettreTrouvees++;
-                                    mot = mot.Substring(k+1, mot.Length);
-                                }
-                            }
-                            //voisin diag bas droite
-                            if ((j + 1 < lettresTirees.GetLength(1)) && (i + 1 < lettresTirees.GetLength(0))) //verif sort pas du plateau
-                            {
-
-                                if (lettresTirees[i + 1, j + 1] == mot[k + 1])
-                                {
-                                    nbLettreTrouvees++;
-                                }
-                            }
-
-                            //voisin bas
-                            if ((i + 1 < lettresTirees.GetLength(1))) //verif sort pas du plateau
-                            {
-
-                                if (lettresTirees[i + 1, j] == mot[k + 1])
-                                {
-                                    nbLettreTrouvees++;
-                                }
-                            }
-
-                            //voisin diag bas gauche
-                            if ((j - 1 >= 0) && (i + 1 < lettresTirees.GetLength(0))) //verif sort pas du plateau
-                            {
-
-                                if (lettresTirees[i + 1, j - 1] == mot[k + 1])
-                                {
-                                    nbLettreTrouvees++;
-                                }
-                            }
-
-                            //voisin gauche
-                            if (j - 1 >= 0) //verif sort pas du plateau
-                            {
-
-                                if (lettresTirees[i, j - 1] == mot[k + 1])
-                                {
-                                    nbLettreTrouvees++;
-                                }
-                            }
-
-                            //voisin diag gauche haut
-                            if ((j - 1 >= 0) && (i - 1 >= 0)) //verif sort pas du plateau
-                            {
-
-                                if (lettresTirees[i - 1, j - 1] == mot[k + 1])
-                                {
-                                    nbLettreTrouvees++;
-                                }
-                            }
-
-                            //voisin haut
-                            if (i - 1 >= 0) //verif sort pas du plateau
-                            {
-
-                                if (lettresTirees[i - 1, j] == mot[k + 1])
-                                {
-                                    nbLettreTrouvees++;
-                                }
-                            }
-
-                            //voisin diag haut droite
-                            if ((j + 1 < lettresTirees.GetLength(1)) && (i - 1 >= 0)) //verif sort pas du plateau
-                            {
-
-                                if (lettresTirees[i + 1, j + 1] == mot[k + 1])
-                                {
-                                    nbLettreTrouvees++;
-                                }
-                            }
+                            ligne = i;
+                            colonne = j;
+                            compteurtemp++;
+                            //if (compteurtemp > 1) { nbLettreTrouvees--; }
                         }
-                            
-                        }
-                    
+
+                        //Quand on trouve une lettre
+                        //droite
+                        if ((colonne + 1 < lettresTirees.GetLength(1))&&(mot[z] == lettresTirees[ligne, colonne + 1])) { nbLettreTrouvees++; colonne ++; }
+                        //diag bas droite
+                        if ((colonne + 1 < lettresTirees.GetLength(1)) && (ligne + 1 < lettresTirees.GetLength(0))&& (mot[z] == lettresTirees[ligne + 1, colonne + 1])) { nbLettreTrouvees++; colonne++; ligne++; }
+                        //bas
+                        if ((ligne + 1 < lettresTirees.GetLength(0))&& (mot[z] == lettresTirees[ligne + 1, colonne])) { nbLettreTrouvees++; ligne++; }
+                        //diag bas gauche
+                        if ((ligne + 1 < lettresTirees.GetLength(0)) && (colonne - 1 >= 0)&&(mot[z] == lettresTirees[ligne + 1, colonne - 1])) { nbLettreTrouvees++; ligne++; colonne--; }
+                        //gauche
+                        if ((colonne - 1 >= 0)&& (mot[z] == lettresTirees[ligne, colonne - 1])) { nbLettreTrouvees++; colonne--; }
+                        //diag haut gauche
+                        if ((colonne - 1 >= 0) && (ligne - 1 >= 0)&& (mot[z] == lettresTirees[ligne - 1, colonne - 1])) { nbLettreTrouvees++;ligne--;colonne--; }
+                        //haut
+                        if ((ligne - 1 >= 0)&& (mot[z] == lettresTirees[ligne - 1, colonne])) { nbLettreTrouvees++; ligne--; }
+                        //diag haut droite
+                        if ((ligne - 1 >= 0) && (colonne + 1 < lettresTirees.GetLength(1))&& (mot[z] == lettresTirees[ligne - 1, colonne + 1])) { nbLettreTrouvees++; ligne--;colonne++; }
+                                                                                         
+                    }
                 }
             }
             Console.WriteLine(nbLettreTrouvees); //test
             if (nbLettreTrouvees == mot.Length) { return true; }    //si on a bien trouvé toutes les lettres, true
             else return false;                                      //sinon faux
             
-        }
-
-
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        // Condition d'adjacence à revoir sur la colonne droite (verifier sur les autres aussi
-        // les dés utilisés non pris en compte (pourquoi ????)
-        //penser à enregistrer les mots donnés par un joueur pour pas qu'il les rentre en boucle (dans la classe jeu ?)
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //      listePositionsGlobal[i][j][k]
-        // i = index pour parcourir la liste référençant les lettres du mot
-        // j = index pour parcourir la liste des positions référencées
-        // k = index pour parcourir les 2 valeurs d'une position
-
-
-
-
-        //return true si la lettre entrée existe dans le plateau
-        public bool ExistenceLettre(char lettre)
-        {
-            for (int i = 0; i < LettresTirees.GetLength(0); i++)
-            {
-                for (int j = 0; j < LettresTirees.GetLength(1); j++)
-                {
-                    if (LettresTirees[i, j] == lettre)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        //permet de parcourir une liste de tableau d'entier à la recherche d'un tableau précis      return true si on trouve l'objet
-        public bool Contient(List<int[]> liste, int[] position)
-        {
-            foreach (int[] tab in liste)
-            {
-                if (tab[0] == position[0] && tab[1] == position[1])
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        //ajoute une position (definie par 2 index) dans la liste entrée
-        public void AjouterPosition(List<int[]> listeIndex, int i, int j)
-        {
-            int[] tab = new int[2];
-            tab[0] = i;
-            tab[1] = j;
-            listeIndex.Add(tab);
-        }
-
-
-        //Liste contenant l'ensemble des positions d'une lettre dans la matrice
-        public List<int[]> ListePositions(char lettre)
-        {
-            List<int[]> listePositions = new List<int[]>();
-
-            for (int i = 0; i < LettresTirees.GetLength(0); i++)
-            {
-                for (int j = 0; j < LettresTirees.GetLength(1); j++)
-                {
-                    if (LettresTirees[i, j] == lettre)
-                    {
-                        AjouterPosition(listePositions, i, j);
-                    }
-                }
-            }
-            return listePositions;
-        }
-
-        //Liste contenant l'ensemble des listes où l'on trouve les positions de chaque lettre du mot dans la matrice
-        // à la n-ieme position de la liste, on trouve les infos relatives à la n-ième lettre du mot
-        public List<List<int[]>> ListePositionsGlobal(string mot)
-        {
-            List<List<int[]>> listeGlobale = new List<List<int[]>>();
-
-            foreach (char lettre in mot)
-            {
-                listeGlobale.Add(ListePositions(lettre));
-            }
-            return listeGlobale;
-        }
-
-        //test les conditions d'adjacence pour 2 positions (représentées par un tableau de 2 entiers)
-        public bool Adjacence(int[] positionA, int[] positionB)
-        {
-            bool adjacenceValide = false;
-
-
-            //si on est en 00
-            if (positionA[0] == 0 && positionA[1] == 0)
-            {
-                //a droite
-                if (positionB[1] == positionA[1] + 1)
-                {
-                    adjacenceValide = true;
-                }
-                //en dessous
-                else if (positionB[0] == positionA[0] + 1)
-                {
-                    adjacenceValide = true;
-                }
-                //diag inf droite
-                else if ((positionB[1] == positionA[1] + 1) && ((positionB[0] == positionA[0] + 1)))
-                {
-                    adjacenceValide = true;
-                }
-            }
-            //si on est en 0, j max
-            else if (positionA[0] == 0 && positionA[1] == LettresTirees.GetLength(1))
-            {
-                //a gauche
-                if (positionB[1] == positionA[1] - 1)
-                {
-                    adjacenceValide = true;
-                }
-                //en dessous                
-                else if (positionB[0] == positionA[0] + 1)
-                {
-                    adjacenceValide = true;
-                }
-                //diag inf gauche
-                else if ((positionB[0] == positionA[0] + 1) && (positionB[1] == positionA[1] - 1))
-                {
-                    adjacenceValide = true;
-                }
-            }
-            //si on est en imax, 0
-            else if (positionA[0] == LettresTirees.GetLength(0) && positionA[1] == 0)
-            {
-                //a droite
-                if (positionB[1] == positionA[1] + 1)
-                {
-                    adjacenceValide = true;
-                }
-                //au dessus
-                else if (positionB[0] == positionA[0] - 1)
-                {
-                    adjacenceValide = true;
-                }
-                //diag supp droite               
-                else if ((positionB[0] == positionA[0] - 1) && (positionB[1] == positionA[1] + 1))
-                {
-                    adjacenceValide = true;
-                }
-            }
-            // si on est en i max, j max
-            else if (positionA[0] == LettresTirees.GetLength(0) && positionA[1] == LettresTirees.GetLength(1))
-            {
-                //a gauche
-                if (positionB[1] == positionA[1] - 1)
-                {
-                    adjacenceValide = true;
-                }
-                //au dessus                
-                else if (positionB[0] == positionA[0] - 1)
-                {
-                    adjacenceValide = true;
-                }
-                //diag supp gauche      
-                else if ((positionB[0] == positionA[0] - 1) && (positionB[1] == positionA[1] - 1))
-                {
-                    adjacenceValide = true;
-                }
-            }
-            // si on est en i, jmax
-            else if (positionA[1] == LettresTirees.GetLength(1))
-            {
-                //a gauche
-                if (positionB[1] == positionA[1] - 1)
-                {
-                    adjacenceValide = true;
-                }
-                //au dessus
-                else if (positionB[0] == positionA[0] - 1)
-                {
-                    adjacenceValide = true;
-                }
-                //en dessous                
-                else if (positionB[0] == positionA[0] + 1)
-                {
-                    adjacenceValide = true;
-                }
-                //diag supp gauche
-                else if ((positionB[0] == positionA[0] - 1) && (positionB[1] == positionA[1] - 1))
-                {
-                    adjacenceValide = true;
-                }
-                //diag inf gauche
-                else if ((positionB[0] == positionA[0] + 1) && (positionB[1] == positionA[1] - 1))
-                {
-                    adjacenceValide = true;
-                }
-            }
-            // si on est en i max, j
-            else if (positionA[0] == LettresTirees.GetLength(0))
-            {
-                //a droite
-                if (positionB[1] == positionA[1] + 1)
-                {
-                    adjacenceValide = true;
-                }
-                //a gauche
-                else if (positionB[1] == positionA[1] - 1)
-                {
-                    adjacenceValide = true;
-                }
-                //au dessus
-                else if (positionB[0] == positionA[0] - 1)
-                {
-                    adjacenceValide = true;
-                }
-                //diag supp droite
-                else if ((positionB[0] == positionA[0] - 1) && (positionB[1] == positionA[1] + 1))
-                {
-                    adjacenceValide = true;
-                }
-                //diag supp gauche
-                else if ((positionB[0] == positionA[0] - 1) && (positionB[1] == positionA[1] - 1))
-                {
-                    adjacenceValide = true;
-                }
-            }
-            //si on est en i,0
-            else if (positionA[1] == LettresTirees.GetLength(1))
-            {
-                //a droite
-                if (positionB[1] == positionA[1] + 1)
-                {
-                    adjacenceValide = true;
-                }
-                //au dessus
-                else if (positionB[0] == positionA[0] - 1)
-                {
-                    adjacenceValide = true;
-                }
-                //en dessous
-                else if (positionB[0] == positionA[0] + 1)
-                {
-                    adjacenceValide = true;
-                }
-                //diag supp droite
-                else if ((positionB[0] == positionA[0] - 1) && (positionB[1] == positionA[1] + 1))
-                {
-                    adjacenceValide = true;
-                }
-                //diag inf droite
-                else if ((positionB[1] == positionA[1] + 1) && ((positionB[0] == positionA[0] + 1)))
-                {
-                    adjacenceValide = true;
-                }
-            }
-            // si on est en 0 , j
-            else if (positionA[0] == LettresTirees.GetLength(0))
-            {
-                //a droite
-                if (positionB[1] == positionA[1] + 1)
-                {
-                    adjacenceValide = true;
-                }
-                //a gauche
-                else if (positionB[1] == positionA[1] - 1)
-                {
-                    adjacenceValide = true;
-                }
-                //en dessous
-                else if (positionB[0] == positionA[0] + 1)
-                {
-                    adjacenceValide = true;
-                }
-                //diag inf droite
-                else if ((positionB[1] == positionA[1] + 1) && ((positionB[0] == positionA[0] + 1)))
-                {
-                    adjacenceValide = true;
-                }
-                //diag inf gauche
-                else if ((positionB[0] == positionA[0] + 1) && (positionB[1] == positionA[1] - 1))
-                {
-                    adjacenceValide = true;
-                }
-            }
-            //si on n'est pas sur un bord
-            else
-            {
-                //a droite
-                if (positionB[1] == positionA[1] + 1)
-                {
-                    adjacenceValide = true;
-                }
-                //a gauche
-                else if (positionB[1] == positionA[1] - 1)
-                {
-                    adjacenceValide = true;
-                }
-                //au dessus
-                else if (positionB[0] == positionA[0] - 1)
-                {
-                    adjacenceValide = true;
-                }
-                //en dessous
-                else if (positionB[0] == positionA[0] + 1)
-                {
-                    adjacenceValide = true;
-                }
-                //diag supp droite
-                else if ((positionB[0] == positionA[0] - 1) && (positionB[1] == positionA[1] + 1))
-                {
-                    adjacenceValide = true;
-                }
-                //diag inf droite
-                else if ((positionB[1] == positionA[1] + 1) && ((positionB[0] == positionA[0] + 1)))
-                {
-                    adjacenceValide = true;
-                }
-                //diag supp gauche
-                else if ((positionB[0] == positionA[0] - 1) && (positionB[1] == positionA[1] - 1))
-                {
-                    adjacenceValide = true;
-                }
-                //diag inf gauche
-                else if ((positionB[0] == positionA[0] + 1) && (positionB[1] == positionA[1] - 1))
-                {
-                    adjacenceValide = true;
-                }
-            }
-            return adjacenceValide;
-        }
-
-
-        //en récursif
-        public bool Test_Plateau(string mot, int incrementeurLettre, List<List<int[]>> listePositionsGlobal, List<int[]> listePositionsUtilisees)
-        {
-            //On verifie tout d'abord que l'ensemble des lettres du mot se trouve dans la matrice
-            int compteurExistence = 0;
-            foreach (char lettre in mot)
-            {
-                if (ExistenceLettre(lettre) == true)
-                {
-                    compteurExistence++;
-                }
-            }
-            if (compteurExistence != mot.Length) //si ce n'est pas le cas on return false
-            {
-                return false;
-            }
-            else //si toutes les lettres existent : 
-            {
-                listePositionsGlobal = ListePositionsGlobal(mot);
-                while (incrementeurLettre < mot.Length)//index de la lettre 
-                {
-                    for (int j = 0; j < listePositionsGlobal[incrementeurLettre].Count; j++)//index pour parcourir les positions 
-                    {
-                        if (incrementeurLettre < mot.Length - 1)
-                        {
-                            if ((Adjacence(listePositionsGlobal[incrementeurLettre][j], listePositionsGlobal[incrementeurLettre + 1][j]) == true) && Contient(listePositionsUtilisees, listePositionsGlobal[incrementeurLettre][j]) == false) // si les positions sont adjacentes & que le dé n'a pas été utilisé
-                            {
-                                listePositionsUtilisees.Add(listePositionsGlobal[incrementeurLettre][j]); // on ajoute la position utilisée dans la liste des positions utilisées
-                                return Test_Plateau(mot, incrementeurLettre + 1, listePositionsGlobal, listePositionsUtilisees);
-                            }
-                            else // si ce n'est pas adjacent : fin et on retourne false
-                            {
-                                return false;
-                            }
-                        }
-                        // dans le cas où on arrive à la derniere lettre : on est arrivé au bout du mot. Sachant que celle-ci existe : on retrun true.
-                        else
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
         }
     }
 }
