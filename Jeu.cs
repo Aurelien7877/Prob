@@ -29,9 +29,6 @@ namespace Prob
             return choix;
         }
 
-        protected static int origRow;           //Fonction position curseur issue de
-        protected static int origCol;           //docs.microsoft.com/fr-fr/dotnet/api/system.console.setcursorposition?
-                                                //view=netcore-3.1
        
 
 
@@ -106,6 +103,9 @@ namespace Prob
         }
 
 
+        protected static int origRow;           //Fonction position curseur issue de
+        protected static int origCol;           //docs.microsoft.com/fr-fr/dotnet/api/system.console.setcursorposition?
+                                                //view=netcore-3.1
 
         protected static void WriteAt(string s, int x, int y)       //Fonction de position de curseur issue de microsoft.com
         {
@@ -132,7 +132,7 @@ namespace Prob
 
             //joueur
             int score = 0;
-            List<string> motTrouves = new List<string>(100);
+            
             Joueur[] joueurs = new Joueur[nbjoueur];
 
             //PSeudo des n joueurs
@@ -140,7 +140,7 @@ namespace Prob
             {
                 WriteAt("Pseudo joueur " +i+" : ", 30, 12);
                 string nom = Console.ReadLine();        //on créé n instances de joueurs
-
+                List<string> motTrouves = new List<string>(100);
                 Console.Clear();
                 joueurs[i-1] = new Joueur(nom, score, motTrouves);
                
@@ -156,11 +156,12 @@ namespace Prob
             int debut = 0;
             int fin = mondico.EnsembleMot.Length;
             int incrementeurLettre = 0;
-            
+            string[] tabTrie = mondico.triArray(); //tri le tableau contenant tout les mots du dico alphabétiquement
+
             List<List<int[]>> listePositionsGlobal=new List<List<int[]>>();
             List<int[]> listePositionsUtilisees = new List<int[]>();
             
-            WriteAt("Vérification ....patientez svp....",0,11);
+            //WriteAt("Vérification ....patientez svp....",0,11);
             
             
             //pour aller au plus vite et ne pas chercher 10 secondes un mot d'une lettre, containtes dans ordre croissant de temps pris
@@ -169,8 +170,8 @@ namespace Prob
                 bool verifAdjacence = plateau.Test_Plateau(mot, incrementeurLettre, listePositionsGlobal, listePositionsUtilisees);
                 if (verifAdjacence==true) //si adjacence ok
                 {
-                    bool verifDico = mondico.RechDichoRecursif(debut, fin, mot);
-                    if (verifDico==true) //si appartient au dico
+                    bool verifDico = mondico.RechDichoRecursif(debut, fin, mot,tabTrie);
+                    if (verifDico== true) //si appartient au dico
                     {
                         return true;
                     }
@@ -179,10 +180,25 @@ namespace Prob
             return false;
         }
 
+        //méthode de calcul du score en fonction de l'énoncé
+        static int calculScore(string mot)
+        {
+            int score = 0;
+            if ((mot.Length>=3)&&(mot.Length<=6)) 
+            {
+                score = mot.Length - 1;
+            }
+            if (mot.Length>=7)
+            {
+                score = 11;
+            }
+            return score;
+        }
 
         //Déroulement du jeu
-        static void tourDeJeu (Joueur [] joueur, int nbDeToursDeJeu)
+        static void tourDeJeu (Joueur [] joueur, int nbDeToursDeJeu,int nbjoueur)
         {
+            //initialisation
             Stopwatch chronotot = new Stopwatch(); //création du chronomètre total
             Stopwatch chrono1min = new Stopwatch(); //création du chronomètre pour 1 min
             int tempsTotal = nbDeToursDeJeu * 60000; //permet d'avoir le temps total en millisecondes 
@@ -202,7 +218,7 @@ namespace Prob
                 Console.Clear();
                 chrono1min.Start(); //démarre le chrono d'une minute
                 
-                StreamReader sReader = plateau.OpenFile("Des.txt"); 
+                StreamReader sReader = plateau.OpenFile("Des.txt"); //on lit le plateau
                 plateau.ReadFile(sReader);                          
                 
                 string affichage = plateau.ToString();
@@ -210,25 +226,25 @@ namespace Prob
 
                 while (chrono1min.ElapsedMilliseconds<60000) //Boucle 1 min
                 {
-                    WriteAt("                                      ", 0, 11);
-                    WriteAt("                  ", 0, 9);
-                    WriteAt("                                           ", 20, 3);  //pour nettoyer l'affichage
+                    WriteAt("                                      ", 0, 11); //pour nettoyer l'affichage
+                    WriteAt("                  ", 0, 9);                        //
+                    WriteAt("                                           ", 20, 3);  //
                     WriteAt("             ", 0, 10);                                //idem
                     WriteAt("Au tour de " + joueur[i].Nom + "\n", 20, 3);
                     WriteAt("Chronomètre lancé", 20, 5);
                     WriteAt("", 0, 8);
                     Console.WriteLine("Saissisez un mot");                   
-                    mots = Convert.ToString(Console.ReadLine()).ToUpper();
+                    mots = Convert.ToString(Console.ReadLine()).ToUpper(); //ToUpper car les mots du dico sont en maj
 
-                    if ((verifContraintes(plateau, mots) == true)&&(joueur[i].MotTrouves.Contains(mots))==false) //si ca contient pas déja le mot
+                    if ((verifContraintes(plateau, mots) == true)&&(joueur[i].Contain(mots)==false)) //si le joueur n'a pas encore dit le mot + toutes les contraintes
                     {
-                        joueur[i].Score += mots.Length - 1;
-                        joueur[i].MotTrouves.Add(mots);             //on add le mot trouvé a la liste
+                        joueur[i].Score += calculScore(mots);       //appel de la méthode calcul score
+                        joueur[i].Add_Mot(mots);                    //on add le mot trouvé a la liste des mots trouvés
                         WriteAt("Score de " + joueur[i].Nom + " = " + joueur[i].Score, 20, 7);
                         WriteAt("                      ", 20, 9);
                         WriteAt("Mot valide :D ", 20, 9);
                     }
-                    else
+                    else                                            //si mot pas valide
                     {
                         WriteAt("                      ", 20, 9);
                         WriteAt("Mot invalide :(", 20, 9);
@@ -241,20 +257,37 @@ namespace Prob
                 WriteAt("                                       ", 0, 13);
                 WriteAt("                            ", 20, 7);
 
-                i++;
-                if (i==joueur.Length) { i = 0; } //si on a fait les n joueurs, on recommence
+                i++;                                //pour passer au joueur d'apres
+                if (i==nbjoueur) { i = 0; } //si on a fait les n joueurs, on recommence
                 chrono1min.Reset();                 //reset d'une chrono de 1 min
                 
             }
             Console.Clear();
-            Console.WriteLine("Fin du temps imparti !");
+            WriteAt("Fin du temps imparti !", 45, 10);
+            Thread.Sleep(1000);
+            Console.Clear();
+            Console.WriteLine("Récapitulatif : ");
+            int indiceGagnant = 0;
+            int scoreGagnant = 0;
+            for (int k =0; k<nbjoueur; k++)
+            {
+                           
+                Console.WriteLine(joueur[k].toString());
+                if (joueur[k].Score>scoreGagnant) //pour trouver le score max
+                {
+                    scoreGagnant = joueur[k].Score;
+                    indiceGagnant = k;
+                }              
+            }
+            Console.WriteLine("Le vainqueur est ...... " + joueur[indiceGagnant].Nom + "\nFélicitations !!");
+            
             
 
         }
 
         static void Main(string[] args)
         {
-            //Console.WriteLine(Console.LargestWindowHeight); //41 Mesires max de la fenetre (de mon ordi donc on met des valeures inf)
+            //Console.WriteLine(Console.LargestWindowHeight); //41 Mesures max de la fenetre (de mon ordi donc on met des valeures inf)
             //Console.WriteLine(Console.LargestWindowWidth); //171
             Console.WindowHeight = 28; //y
             Console.WindowWidth = 120;//x
@@ -286,6 +319,7 @@ namespace Prob
                 Console.WriteLine();
                 switch (exo) 
                 {
+                    //cas jeu
                     case 1:
                         
                         Console.Clear();
@@ -329,44 +363,33 @@ namespace Prob
                             }
                         }
 
-                        Joueur [] joueurs = CreationInstances(nbjoueur);
+                        Joueur [] joueurs = CreationInstances(nbjoueur); //création des instances
 
-                        tourDeJeu(joueurs,nbToursDeJeu);
+                        tourDeJeu(joueurs,nbToursDeJeu,nbjoueur);       //déroulement de la partie
 
                         
                         break;
-
+                    //cas regle
                     case 2:
                         Console.Clear();
-                        string regles = "Au début de chaque tour, 16 dés à 6 faces différentes et réprésentant des lettres sont lancés. Un plateau 4x4 représente alors ce lancer.\n" +
+                        string regles = "Au début de chaque tour, 16 dés à 6 faces différentes et réprésentant des lettres sont lancés.\nUn plateau 4x4 représente alors ce lancer.\n" +
                             "Un compte à rebours défini par l'utilisateur se lance alors pour chronométrer l'entiereté de la partie. \n" +
                             "Chaque joueur joue l’un après l’autre pendant un laps de temps de 1 mn.\n\n\n" +
                             "Le but du jeu est de trouver les mots formés sur le plateau.\n" +
-                            " Ceux-ci doivent respecter les règles suivantes pour être validés : \n\n" +
+                            "Ceux-ci doivent respecter les règles suivantes pour être validés : \n\n" +
                             "-Un mot doit être composé de 3 lettres minimum.\n" +
                             "-Les lettres consécutives d'un mot doivent être adjacentes sur le plateau \n" +
                             "(que ce soit horizontalement, verticalement ou en diagonalement).\n" +
                             "-Chaque mot trouvé et validé rapporte des points selon sa longueur.\n" +
                             "-Les mots peuvent être au singulier ou au pluriel, conjugués ou non, \n" +
                             "mais ne doivent pas utiliser plusieurs fois le même dé pour le même mot.\n" +
-                            "-Enfin, un mot ne sera accepté qu'une fois pour un même joueur.";
+                            "-Enfin, un mot ne sera accepté qu'une fois pour un même joueur.\n\n";
                         Console.WriteLine(regles);
                         break;
-
+                    //cas quitter
                     case 3:
-                        Dictionnaire mondico = CreationDico();
-                        string affichage = mondico.toString();
-                        Console.WriteLine(affichage);
-                        Console.WriteLine("Entrer un mot pour savoir si il appartient au dico");
-                        string mot = Console.ReadLine().ToUpper();
-                        int debut = 0;
-                        int fin = mondico.EnsembleMot.Length;
-                        Console.WriteLine("fin =" + fin);
-                        //string[] tab = mondico.triArray(); TRI OK
-                        
-                        bool verif = mondico.RechDichoRecursif(debut, fin, mot); //OKKKK
-                        if (verif == true) Console.WriteLine("trouvé");
-                        else Console.WriteLine("pas trouvé");
+                        Console.Clear();
+                        System.Environment.Exit(1);         //Pour tout quitter d'un coup
                         break;
                 }
                 Console.WriteLine("Tapez Escape pour sortir ou un numero d'action");
