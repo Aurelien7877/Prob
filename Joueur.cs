@@ -56,12 +56,6 @@ namespace Prob
             motTrouves.Add(mot);
         }
 
-        // teste si le mot passé en paramètre a déjà été cité
-        public bool Mot_Cite(string mot)
-        {
-            return false; //A developper
-        }
-
         //décrit un joueur
         public string toString()
         {

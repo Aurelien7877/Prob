@@ -389,7 +389,7 @@ namespace Prob
                     //cas quitter
                     case 3:
                         Console.Clear();
-                        System.Environment.Exit(1);         //Pur tout quitter d'un coup
+                        System.Environment.Exit(1);         //Pour tout quitter d'un coup
                         break;
                 }
                 Console.WriteLine("Tapez Escape pour sortir ou un numero d'action");
