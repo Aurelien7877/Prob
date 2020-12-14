@@ -450,9 +450,11 @@ namespace Prob
         }
 
 
-        //en récursif
+        //en récursif   non fonctionnel atm
         public bool Test_Plateau(string mot, int incrementeurLettre, List<List<int[]>> listePositionsGlobal, List<int[]> listePositionsUtilisees)
         {
+
+
             //On verifie tout d'abord que l'ensemble des lettres du mot se trouve dans la matrice
             int compteurExistence = 0;
             foreach (char lettre in mot)
@@ -462,30 +464,60 @@ namespace Prob
                     compteurExistence++;
                 }
             }
+
+
+
+
             if (compteurExistence != mot.Length) //si ce n'est pas le cas on return false
             {
                 return false;
             }
             else //si toutes les lettres existent : 
             {
-                listePositionsGlobal = ListePositionsGlobal(mot);
+                if (incrementeurLettre == 0) // au premier passage de la boucle, on enregistre les positions de chaque lettres composant le mot entré
+                {
+                    listePositionsGlobal = ListePositionsGlobal(mot);
+                    //AffichageListeGlobale(listePositionsGlobal);
+                    //Console.ReadKey();
+                }
+                // on verifie maintenant que pour la n-ieme lettre du mot, il existe la lettre n+1 respectant les conditions d'adjacence. On vérfie aussi que le dé n'ai pas déjà été utilisé
                 while (incrementeurLettre < mot.Length)//index de la lettre 
                 {
                     for (int j = 0; j < listePositionsGlobal[incrementeurLettre].Count; j++)//index pour parcourir les positions 
                     {
-                        if (incrementeurLettre < mot.Length - 1)
+                        if (incrementeurLettre < mot.Length - 1) // on va effectuer cette opération pour chaque lettre du mot, sauf la dernière puisqu'elle n'a pas de lettre après elle
                         {
-                            if ((Adjacence(listePositionsGlobal[incrementeurLettre][j], listePositionsGlobal[incrementeurLettre + 1][j]) == true) && Contient(listePositionsUtilisees, listePositionsGlobal[incrementeurLettre][j]) == false) // si les positions sont adjacentes & que le dé n'a pas été utilisé
+                            if ((Adjacence(listePositionsGlobal[incrementeurLettre][j], listePositionsGlobal[incrementeurLettre + 1][j]) == true)) // si les positions sont adjacentes 
                             {
-                                listePositionsUtilisees.Add(listePositionsGlobal[incrementeurLettre][j]); // on ajoute la position utilisée dans la liste des positions utilisées
-                                return Test_Plateau(mot, incrementeurLettre + 1, listePositionsGlobal, listePositionsUtilisees);
+                                if (Contient(listePositionsUtilisees, listePositionsGlobal[incrementeurLettre][j]) == false) //si le dé n'a pas été utilisé
+                                {
+                                    listePositionsUtilisees.Add(listePositionsGlobal[incrementeurLettre][j]); // on ajoute la position utilisée dans la liste des positions utilisées                                
+                                    return Test_Plateau(mot, incrementeurLettre + 1, listePositionsGlobal, listePositionsUtilisees); // on return la méthode pour faire les tests du rang suivant
+                                }
+                                else // si le dé a déjà été utilisé : on return false
+                                {
+                                    Console.WriteLine("Case déjà utilisée");
+                                    Console.ReadKey();
+                                    return false;
+                                }
+
                             }
-                            else // si ce n'est pas adjacent : fin et on retourne false
+                            else // si les 2 positions testées ne sont pas adjacentes : 
                             {
-                                return false;
+                                if (j == listePositionsGlobal[incrementeurLettre].Count - 1) //si on a testé toutes les valeurs de j (<=> on a parcouru l'ensemble des positions de la lettre donnée)
+                                {
+                                    Console.WriteLine("Les dés ne sont pas adjacents"); //les lettres ne sont pas adjacentes donc on return false;
+                                    Console.ReadKey();
+                                    return false;
+                                }
+                                //  si j n'est pas à sa valeur max, c'est qu'il reste des occurences de la lettre dans le plateau : on refait un tour de boucle, en incrementant j
+                                //else
+                                //{
+                                //    Console.WriteLine(j);
+                                //}
                             }
                         }
-                        // dans le cas où on arrive à la derniere lettre : on est arrivé au bout du mot. Sachant que celle-ci existe : on retrun true.
+                        // dans le cas où on arrive à la derniere lettre : on est arrivé au bout du mot. Sachant que celle-ci existe : on return true.
                         else
                         {
                             return true;
@@ -495,9 +527,10 @@ namespace Prob
             }
             return false;
         }
-
-
-
-
     }
+
+
+
+
+
 }
