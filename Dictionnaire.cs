@@ -157,38 +157,34 @@ namespace Prob
 
 
         //recherche en récursif; Fonctionnel
-        public bool RechDichoRecursif(int debut, int fin, string mot)
+        public bool RechDichoRecursif(int debut, int fin, string mot,string []tab)
         {
 
-            int milieu = (debut + fin) / 2;
-           
-
-            int comparaison = String.Compare(mot, triArray()[milieu]); //on compare le mot avec le mot situé au milieu du tableau contenant l'ensemble des mots et trié par ordre alphabetique
-
-            if (comparaison != 0 && debut==fin)
+            if (debut > fin) //condition d'arret si erreur de borne
             {
                 return false;
             }
-            else if (comparaison < 0) //=> mot est avant TriAlphabetique()[milieu] => fin = milieu-1;
-            {                
-                return RechDichoRecursif(debut, milieu -1, mot);
-            }
-            else if(comparaison > 0)//=> mot est apres TriAlphabetique()[milieu] => debut = milieu+1;
+            if ((tab==null)||(tab.Length==0)) //si tab null
             {
-                return RechDichoRecursif(milieu+1, fin, mot);
+                return false;
             }
-            else if(comparaison == 0)
+            int milieu = (debut + fin) / 2;
+            int comparaison = String.Compare(mot, tab[milieu]); //on compare le mot avec le mot situé au milieu du tableau contenant l'ensemble des mots et trié par ordre alphabetique
+            if (comparaison == 0) //=> mot est avant triArray()[milieu] => fin = milieu-1;
             {
                 return true;
             }
-            else
+            else if (comparaison > 0)//=> mot est apres triArray()[milieu] => debut = milieu+1;
             {
-                return false;
+                return RechDichoRecursif(milieu + 1, fin, mot,tab);
             }
+            else 
+            {
+                return RechDichoRecursif(debut, milieu - 1, mot, tab);
+            }
+            
         }
 
-       
-        
 
     }
 }
