@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace Prob
 {
-    class Jeu
+    public class Jeu
     {
         //menu Main
         static int SaisieNombre()
@@ -29,9 +29,8 @@ namespace Prob
             return choix;
         }
 
-       
-
-
+    
+        //Création méthode StreaReader pour oubrir le fichier
         static public StreamReader OpenFile(string fileName)
         {
             StreamReader sReader = null;
@@ -51,7 +50,7 @@ namespace Prob
             return sReader;
         }
 
-        //methode lecture dictionnaire
+        //methode lecture dictionnaire et enregistrement variables
         static public string[] ReadFile(StreamReader sReader)
         {
             string line;
@@ -93,6 +92,7 @@ namespace Prob
             }
         }
 
+        ///méthode création instance dico
         static Dictionnaire CreationDico()
         {
             string langue = "Français";
@@ -103,11 +103,11 @@ namespace Prob
         }
 
 
-        protected static int origRow;           //Fonction position curseur issue de
-        protected static int origCol;           //docs.microsoft.com/fr-fr/dotnet/api/system.console.setcursorposition?
-                                                //view=netcore-3.1
+        protected static int origRow;           ///Fonction position curseur issue de
+        protected static int origCol;           ///docs.microsoft.com/fr-fr/dotnet/api/system.console.setcursorposition?
+                                                ///view=netcore-3.1
 
-        protected static void WriteAt(string s, int x, int y)       //Fonction de position de curseur issue de microsoft.com
+        protected static void WriteAt(string s, int x, int y)       ///Fonction de position de curseur issue de microsoft.com
         {
             try
             {
@@ -121,7 +121,7 @@ namespace Prob
             }
         }
 
-        //méthode qui va crée les instances de joueurs
+        ///méthode qui va crée les instances de joueurs
         static Joueur[] CreationInstances (int nbjoueur)
         {
             Console.Clear();

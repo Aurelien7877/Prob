@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Prob
 {
-    class Dictionnaire
+    public class Dictionnaire
     {
         static private int longueur; //longueur = nb de mots        
         private string langue;

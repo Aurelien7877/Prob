@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Prob
 {
-    class Plateau
+    public class Plateau
     {
         private De[] des = new De[16];
         private char[,] lettresTirees = new char[10,10];

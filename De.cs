@@ -8,7 +8,7 @@ using System.IO;
 namespace Prob
 {
 
-    class De
+    public class De
     {
         private char[] ensembleLettre;  //pour l'ensemble de lettre
         private char lettreTiree;       //la lettre triée

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Prob
 {
-    class Joueur
+    public class Joueur
     {
         //attributs
         private string nom;
