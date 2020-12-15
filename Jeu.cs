@@ -155,10 +155,9 @@ namespace Prob
             Dictionnaire mondico = CreationDico();
             int debut = 0;
             int fin = mondico.EnsembleMot.Length;
-            int incrementeurLettre = 0;
             string[] tabTrie = mondico.triArray(); //tri le tableau contenant tout les mots du dico alphabétiquement
 
-            List<List<int[]>> listePositionsGlobal=new List<List<int[]>>();
+            List<List<int[]>> listePositionsGlobal= plateau.ListePositionsGlobal(mot);
             List<int[]> listePositionsUtilisees = new List<int[]>();
             
             //WriteAt("Vérification ....patientez svp....",0,11);
@@ -167,7 +166,7 @@ namespace Prob
             //pour aller au plus vite et ne pas chercher 10 secondes un mot d'une lettre, containtes dans ordre croissant de temps pris
             if (mot.Length >= 3)//si longueur ok
             {
-                bool verifAdjacence = plateau.Test_Plateau(mot, incrementeurLettre, listePositionsGlobal, listePositionsUtilisees);
+                bool verifAdjacence = plateau.Test_Plateau(mot, listePositionsGlobal, listePositionsUtilisees);
                 if (verifAdjacence==true) //si adjacence ok
                 {
                     bool verifDico = mondico.RechDichoRecursif(debut, fin, mot,tabTrie);
