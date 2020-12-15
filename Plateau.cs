@@ -89,11 +89,14 @@ namespace Prob
                     string ligne = line.Replace(";", ""); //on crée une string sans les ;
 
                     char[] tab = ligne.ToCharArray(0, ligne.Length); //on convertit la string en tableau de char
-                    char lettretiree = tab[r.Next(0, 6)]; //obtient une lettre parmi les 6
-                    De de = new De(tab,lettretiree); //on crée une instance Dé avec ce dé
+                    char lettretemp = ' ';
+                    De deTempo = new De(tab,lettretemp);    //on cré un dé temporaire
+                    char lettretiree = deTempo.Lance(r);    //on lance ce dé
+                    //char lettretiree = tab[r.Next(0, 6)]; //obtient une lettre parmi les 6
+                    De deVisible = new De(tab,lettretiree); //on crée une instance Dé avec le bon dé visible
                     
-                    des[i] = de;
-                    lettresTirees[k, j] = lettretiree;
+                    des[i] = deVisible;                     //on l'enregistre dans notre tableau de dé
+                    lettresTirees[k, j] = lettretiree;      //on enregistre aussi la face visivle dans le plateau 
                     i++;
                     j++;
                     if (j>=4) 

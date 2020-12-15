@@ -27,7 +27,7 @@ namespace Prob
         public string Langue
         {
             get { return this.langue; }
-            set { this.langue = value; }
+            //set { this.langue = value; }
         }        
         
 

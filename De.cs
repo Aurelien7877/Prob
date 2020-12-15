@@ -38,7 +38,7 @@ namespace Prob
         {
             int tri = r.Next(0, 6);
             this.lettreTiree = ensembleLettre[tri];
-            return lettreTiree;
+            return this.lettreTiree;
         }
 
         //Chaine qui décrit le dé
