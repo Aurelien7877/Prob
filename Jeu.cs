@@ -30,7 +30,7 @@ namespace Prob
         }
 
     
-        //Création méthode StreaReader pour oubrir le fichier
+        //Création méthode StreamReader pour oubrir le fichier
         static public StreamReader OpenFile(string fileName)
         {
             StreamReader sReader = null;
@@ -118,7 +118,7 @@ namespace Prob
             {
                 Console.Clear();
                 Console.WriteLine(e.Message);
-            }
+            } 
         }
 
         ///méthode qui va crée les instances de joueurs

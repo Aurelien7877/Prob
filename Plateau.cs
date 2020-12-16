@@ -10,7 +10,7 @@ namespace Prob
     public class Plateau
     {
         private De[] des = new De[16];
-        private char[,] lettresTirees = new char[10,10];
+        private char[,] lettresTirees = new char[4,4];
 
         public Plateau(De[] des, char[,] lettresTirees)
         {
@@ -118,20 +118,14 @@ namespace Prob
             }
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Problèmes à regler sur le test plateau : 
-
-
-        // problèmes quand il y a des lettre consécutives identiques
-        // les dés utilisés non pris en compte (pourquoi ????)      
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      
 
 
 
         //      listePositionsGlobal[i][j][k]
-        // i = index pour parcourir la liste référençant les lettres du mot
-        // j = index pour parcourir la liste des positions référencées
-        // k = index pour parcourir les 2 valeurs d'une position
+        // i = index pour parcourir la liste référençant les lettres du mot //ici incrémenteurLettre, première liste
+        // j = index pour parcourir la liste des positions référencées      //ici incrementeurPosition, 2e liste, parcourt les positions de la lettre associée
+        // k = index pour parcourir les 2 valeurs d'une position            //Position selon la colonne ou la ligne
 
         //methode de verification 
         public string PositionToString(int[] tab)
@@ -214,8 +208,11 @@ namespace Prob
         public bool Adjacence(int[] positionA, int[] positionB)
         {
             bool adjacenceValide = false;
+            //Position A pour lettre n, Position B pour n+1
+            //[0] correspond a i (lignes) , et [1] correspond a j (colonnes)
 
 
+            ///Pour les 4 coins
             //si on est en 00
             if (positionA[0] == 0 && positionA[1] == 0)
             {
@@ -292,7 +289,9 @@ namespace Prob
                     adjacenceValide = true;
                 }
             }
-            // si on est en i, jmax
+
+            ///Pour les bords
+            // si on est en i, jmax : Bord droit
             else if (positionA[1] == LettresTirees.GetLength(1) - 1)
             {
                 //a gauche
@@ -321,6 +320,7 @@ namespace Prob
                     adjacenceValide = true;
                 }
             }
+            //Bord bas
             // si on est en i max, j
             else if (positionA[0] == LettresTirees.GetLength(0) - 1)
             {
@@ -350,6 +350,8 @@ namespace Prob
                     adjacenceValide = true;
                 }
             }
+
+            ///Bord gauche
             //si on est en i,0
             else if (positionA[1] == LettresTirees.GetLength(1) - 1)
             {
@@ -379,6 +381,8 @@ namespace Prob
                     adjacenceValide = true;
                 }
             }
+
+            //Bord haut
             // si on est en 0 , j
             else if (positionA[0] == LettresTirees.GetLength(0) - 1)
             {
@@ -408,6 +412,7 @@ namespace Prob
                     adjacenceValide = true;
                 }
             }
+            //Milieu
             //si on n'est pas sur un bord
             else
             {
@@ -479,14 +484,14 @@ namespace Prob
             {
                 // on verifie que pour la n-ieme lettre du mot, il existe la lettre n+1 respectant les conditions d'adjacence.
 
-                if (incrementeurLettre < mot.Length - 1) // on va effectuer cette opération pour chaque lettre du mot, sauf la dernière puisqu'elle n'a pas de lettre après elle
+                if (incrementeurLettre < mot.Length-2) // on va effectuer cette opération pour chaque lettre du mot, sauf la dernière puisqu'elle n'a pas de lettre après elle
                 {
                     if ((Adjacence(listePositionsGlobal[incrementeurLettre][incrementeurPosition], listePositionsGlobal[incrementeurLettre + 1][incrementeurPosition]) == true)) // si les positions sont adjacentes 
                     {
                         if (Contient(listePositionsUtilisees, listePositionsGlobal[incrementeurLettre][incrementeurPosition]) == false) //si le dé n'a pas été utilisé
                         {
                             listePositionsUtilisees.Add(listePositionsGlobal[incrementeurLettre][incrementeurPosition]); // on ajoute la position utilisée dans la liste des positions utilisées                                
-                            return Test_Plateau(mot, listePositionsGlobal, listePositionsUtilisees, incrementeurLettre + 1, incrementeurPosition); // on return la méthode pour faire les tests sur la lettre suivante
+                            return Test_Plateau(mot, listePositionsGlobal, listePositionsUtilisees, incrementeurLettre + 1, 0); // on return la méthode pour faire les tests sur la lettre suivante
                         }
                         else // si le dé a déjà été utilisé : on return false
                         {
@@ -505,7 +510,7 @@ namespace Prob
 
                             return false;
                         }
-                        //si j n'est pas à sa valeur max, c'est qu'il reste des occurences de la lettre dans le plateau : on refait un tour de boucle, en incrementant j
+                        //si incrémenteurPosition n'est pas à sa valeur max, c'est qu'il reste des occurences de la lettre dans le plateau : on refait un tour de boucle, en incrementant j
                         else //on doit vérifier les potentielles autres positions de la lettre dans le plateau : on incremente le compteur associé pour verifier les autres positions
                         {
                             return Test_Plateau(mot, listePositionsGlobal, listePositionsUtilisees, incrementeurLettre, incrementeurPosition + 1); // on return la méthode pour faire les tests sur la lettre suivante
